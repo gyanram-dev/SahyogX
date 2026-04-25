@@ -1,0 +1,6 @@
+id,need_type,location,urgency,skill_required
+1,Medical Help,Patna,10,Medical
+2,Food Kits,Patna,8,Food
+3,Transport Support,Gaya,7,Logistics
+4,Teaching Support,Patna,6,Teaching
+5,Medical Emergency,Gaya,9,Medical

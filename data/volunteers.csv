@@ -1,0 +1,9 @@
+id,name,skill,location,availability,reliability
+1,Rahul,Medical,Patna,Yes,9
+2,Priya,Food,Patna,Yes,8
+3,Aman,Logistics,Gaya,Yes,7
+4,Sneha,Medical,Gaya,No,9
+5,Vikash,Food,Patna,Yes,6
+6,Neha,Teaching,Patna,Yes,8
+7,Rohan,Medical,Gaya,Yes,7
+8,Ankit,Logistics,Patna,Yes,8
