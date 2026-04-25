@@ -1,86 +1,113 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from pathlib import Path
 import pandas as pd
 
+# ---------------------------
+# App Setup
+# ---------------------------
 app = FastAPI(title="SahyogX API")
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],   # hackathon mode
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-# ---------- Request Model ----------
-class HelpRequest(BaseModel):
+# ---------------------------
+# File Paths
+# ---------------------------
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+DATA_DIR = BASE_DIR / "data"
+
+REQUESTS_FILE = DATA_DIR / "requests.csv"
+VOLUNTEERS_FILE = DATA_DIR / "volunteers.csv"
+
+# ---------------------------
+# Load Data
+# ---------------------------
+requests_df = pd.read_csv(REQUESTS_FILE)
+volunteers_df = pd.read_csv(VOLUNTEERS_FILE)
+
+# ---------------------------
+# Models
+# ---------------------------
+class RequestInput(BaseModel):
     need_type: str
     location: str
     urgency: int
     skill_required: str
 
-
-# ---------- Load Existing CSV ----------
-requests_df = pd.read_csv("data/requests.csv")
-
-
+# ---------------------------
+# Routes
+# ---------------------------
 @app.get("/")
 def home():
     return {"message": "SahyogX backend is running"}
 
-
 @app.get("/requests")
 def get_requests():
+    global requests_df
     return requests_df.to_dict(orient="records")
 
-
 @app.post("/request")
-def add_request(new_request: HelpRequest):
+def add_request(data: RequestInput):
     global requests_df
 
-    new_row = {
+    new_row = pd.DataFrame([{
         "id": len(requests_df) + 1,
-        "need_type": new_request.need_type,
-        "location": new_request.location,
-        "urgency": new_request.urgency,
-        "skill_required": new_request.skill_required
-    }
+        "need_type": data.need_type,
+        "location": data.location,
+        "urgency": data.urgency,
+        "skill_required": data.skill_required
+    }])
 
-    requests_df = pd.concat(
-        [requests_df, pd.DataFrame([new_row])],
-        ignore_index=True
-    )
+    requests_df = pd.concat([requests_df, new_row], ignore_index=True)
+    requests_df.to_csv(REQUESTS_FILE, index=False)
 
-    return {"message": "Request added successfully", "data": new_row}
-
+    return {"message": "Request added successfully"}
 
 @app.get("/allocate")
 def allocate():
-    volunteers = pd.read_csv("data/volunteers.csv")
+    global requests_df, volunteers_df
 
     assignments = []
 
+    used_volunteers = set()
+
     for _, req in requests_df.iterrows():
         best_score = -1
-        best_volunteer = None
+        best_person = None
 
-        for _, vol in volunteers.iterrows():
+        for _, vol in volunteers_df.iterrows():
 
-            if vol["availability"] != "Yes":
+            if vol["name"] in used_volunteers:
                 continue
 
             score = 0
 
-            if vol["skill"] == req["skill_required"]:
+            if req["location"] == vol["location"]:
                 score += 50
 
-            if vol["location"] == req["location"]:
-                score += 30
+            if req["skill_required"].lower() == vol["skill"].lower():
+                score += 40
 
-            score += int(vol["reliability"]) * 2
             score += int(req["urgency"])
 
             if score > best_score:
                 best_score = score
-                best_volunteer = vol["name"]
+                best_person = vol["name"]
+
+        if best_person:
+            used_volunteers.add(best_person)
 
         assignments.append({
             "request": req["need_type"],
             "location": req["location"],
-            "assigned_volunteer": best_volunteer,
+            "assigned_volunteer": best_person if best_person else "Unassigned",
             "score": best_score
         })
 
