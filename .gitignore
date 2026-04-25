@@ -216,3 +216,16 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Project generated outputs
+data/assignments.csv
+
+# Local secrets
+.env.local
+
+# Frontend node modules (if React frontend inside repo)
+frontend/node_modules/
+
+# Build outputs
+frontend/dist/
+frontend/.next/
