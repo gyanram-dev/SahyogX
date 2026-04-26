@@ -4,3 +4,5 @@ id,need_type,location,urgency,skill_required
 3,Transport Support,Gaya,7,Logistics
 4,Teaching Support,Patna,6,Teaching
 5,Medical Emergency,Gaya,9,Medical
+6,Medical,dumka,10,Medical
+7,Medical,khudisar,8,Medical

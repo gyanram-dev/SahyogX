@@ -112,3 +112,14 @@ def allocate():
         })
 
     return {"assignments": assignments}
+@app.post("/assign/{request_id}")
+def assign_request(request_id: int):
+    global requests_data
+
+    for req in requests_data:
+        if req["id"] == request_id:
+            req["status"] = "Assigned"
+            req["assigned_to"] = "Volunteer A"
+            return {"message": "Assigned successfully", "request": req}
+
+    return {"error": "Request not found"}
