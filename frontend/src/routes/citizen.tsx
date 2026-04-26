@@ -18,6 +18,37 @@ const urgencies = [
 function Citizen() {
   const [cat, setCat] = useState("Medical");
   const [urg, setUrg] = useState("High");
+  const submitRequest = async () => {
+  const urgencyMap = {
+    Critical: 10,
+    High: 8,
+    Medium: 6,
+    Low: 4,
+  };
+
+  const payload = {
+    need_type: cat,
+    location: "Patna",
+    urgency: urgencyMap[urg as keyof typeof urgencyMap],
+    skill_required: cat,
+  };
+
+  try {
+    const res = await fetch("http://127.0.0.1:8000/request", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    await res.json();
+    alert("Request submitted successfully!");
+  } catch (error) {
+    alert("Backend connection failed");
+    console.log(error);
+  }
+};
   return (
     <div className="min-h-screen gradient-hero">
       <header className="max-w-5xl mx-auto px-6 py-6 flex items-center justify-between">
@@ -113,7 +144,10 @@ function Citizen() {
             </label>
           </div>
 
-          <button className="w-full h-12 rounded-xl gradient-amber text-white font-semibold shadow-glow hover:shadow-elevated transition">
+          <button
+          onClick={submitRequest}
+          className="w-full h-12 rounded-xl gradient-amber text-white font-semibold shadow-glow hover:shadow-elevated transition"
+        >
             Send request — match responder
           </button>
           <p className="text-[11px] text-muted-foreground text-center">
