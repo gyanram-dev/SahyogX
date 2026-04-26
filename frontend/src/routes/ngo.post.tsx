@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { PageHeader, Card } from "@/components/portal/PortalLayout";
+import { PageHeader, Card } from "../components/portal/PortalLayout";
 
 export const Route = createFileRoute("/ngo/post")({
   head: () => ({ meta: [{ title: "Post Task — NGO" }] }),
