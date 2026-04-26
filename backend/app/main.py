@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from pathlib import Path
@@ -32,6 +32,77 @@ VOLUNTEERS_FILE = DATA_DIR / "volunteers.csv"
 requests_df = pd.read_csv(REQUESTS_FILE)
 volunteers_df = pd.read_csv(VOLUNTEERS_FILE)
 
+def normalize_requests_df():
+    global requests_df
+
+    if "id" not in requests_df.columns:
+        requests_df.insert(0, "id", range(1, len(requests_df) + 1))
+
+    requests_df["id"] = pd.to_numeric(requests_df["id"], errors="coerce")
+
+    next_id = 1
+    for idx, value in requests_df["id"].items():
+        if pd.isna(value):
+            requests_df.at[idx, "id"] = next_id
+        next_id = max(next_id, int(requests_df.at[idx, "id"]) + 1)
+
+    requests_df["id"] = requests_df["id"].astype(int)
+
+    if "status" not in requests_df.columns:
+        requests_df["status"] = "Open"
+    else:
+        requests_df["status"] = requests_df["status"].fillna("Open")
+
+    if "assigned_to" not in requests_df.columns:
+        requests_df["assigned_to"] = None
+
+    if requests_df["id"].duplicated().any():
+        seen_ids = set()
+        next_id = int(requests_df["id"].max()) + 1
+
+        for idx, request_id in requests_df["id"].items():
+            if request_id in seen_ids:
+                requests_df.at[idx, "id"] = next_id
+                next_id += 1
+            else:
+                seen_ids.add(request_id)
+
+        requests_df["id"] = requests_df["id"].astype(int)
+        requests_df.to_csv(REQUESTS_FILE, index=False)
+
+
+def request_records():
+    normalize_requests_df()
+    return (
+        requests_df.astype(object)
+        .where(pd.notna(requests_df), None)
+        .to_dict(orient="records")
+    )
+
+
+def request_record(row_index: int):
+    row = requests_df.loc[[row_index]]
+    return (
+        row.astype(object)
+        .where(pd.notna(row), None)
+        .to_dict(orient="records")[0]
+    )
+
+
+def update_request_status(request_id: int, status: str):
+    global requests_df
+    normalize_requests_df()
+
+    matches = requests_df.index[requests_df["id"] == request_id].tolist()
+    if not matches:
+        raise HTTPException(status_code=404, detail="Request not found")
+
+    row_index = matches[0]
+    requests_df.at[row_index, "status"] = status
+    requests_df.to_csv(REQUESTS_FILE, index=False)
+
+    return request_record(row_index)
+
 # ---------------------------
 # Models
 # ---------------------------
@@ -51,18 +122,33 @@ def home():
 @app.get("/requests")
 def get_requests():
     global requests_df
-    return requests_df.to_dict(orient="records")
+    return request_records()
+
+@app.get("/volunteer/tasks")
+def get_volunteer_tasks():
+    normalize_requests_df()
+    active_tasks = requests_df[requests_df["status"].isin(["Assigned", "Accepted"])]
+    return (
+        active_tasks.astype(object)
+        .where(pd.notna(active_tasks), None)
+        .to_dict(orient="records")
+    )
 
 @app.post("/request")
 def add_request(data: RequestInput):
     global requests_df
+    normalize_requests_df()
+
+    next_id = 1 if requests_df.empty else int(requests_df["id"].max()) + 1
 
     new_row = pd.DataFrame([{
-        "id": len(requests_df) + 1,
+        "id": next_id,
         "need_type": data.need_type,
         "location": data.location,
         "urgency": data.urgency,
-        "skill_required": data.skill_required
+        "skill_required": data.skill_required,
+        "status": "Open",
+        "assigned_to": None,
     }])
 
     requests_df = pd.concat([requests_df, new_row], ignore_index=True)
@@ -114,12 +200,22 @@ def allocate():
     return {"assignments": assignments}
 @app.post("/assign/{request_id}")
 def assign_request(request_id: int):
-    global requests_data
+    global requests_df
+    request = update_request_status(request_id, "Assigned")
 
-    for req in requests_data:
-        if req["id"] == request_id:
-            req["status"] = "Assigned"
-            req["assigned_to"] = "Volunteer A"
-            return {"message": "Assigned successfully", "request": req}
+    row_index = requests_df.index[requests_df["id"] == request_id].tolist()[0]
+    requests_df.at[row_index, "assigned_to"] = "Volunteer A"
+    requests_df.to_csv(REQUESTS_FILE, index=False)
+    request = request_record(row_index)
 
-    return {"error": "Request not found"}
+    return {"message": "Assigned successfully", "request": request}
+
+@app.post("/volunteer/accept/{request_id}")
+def accept_volunteer_task(request_id: int):
+    request = update_request_status(request_id, "Accepted")
+    return {"message": "Task accepted successfully", "request": request}
+
+@app.post("/volunteer/complete/{request_id}")
+def complete_volunteer_task(request_id: int):
+    request = update_request_status(request_id, "Completed")
+    return {"message": "Task completed successfully", "request": request}
