@@ -36,13 +36,29 @@ function NgoDashboard() {
 
   useEffect(() => {
     loadRequests();
+
+    const interval = window.setInterval(loadRequests, 3000);
+    return () => window.clearInterval(interval);
   }, []);
 
   const assignRequest = async (id: number) => {
     try {
-      await fetch(`http://127.0.0.1:8000/assign/${id}`, {
+      const res = await fetch(`http://127.0.0.1:8000/assign/${id}`, {
         method: "POST",
       });
+
+      if (!res.ok) {
+        throw new Error(`Assignment failed with status ${res.status}`);
+      }
+
+      const data = await res.json();
+      if (data?.request) {
+        setRequests((current) =>
+          current.map((request) =>
+            request.id === id ? { ...request, ...data.request } : request,
+          ),
+        );
+      }
 
       await loadRequests();
     } catch (error) {

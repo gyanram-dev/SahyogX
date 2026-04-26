@@ -1,8 +1,12 @@
-id,need_type,location,urgency,skill_required
-1,Medical Help,Patna,10,Medical
-2,Food Kits,Patna,8,Food
-3,Transport Support,Gaya,7,Logistics
-4,Teaching Support,Patna,6,Teaching
-5,Medical Emergency,Gaya,9,Medical
-6,Medical,dumka,10,Medical
-7,Medical,khudisar,8,Medical
+id,need_type,location,urgency,skill_required,status,assigned_to
+1,Medical Help,Patna,10,Medical,Completed,Volunteer A
+2,Food Kits,Patna,8,Food,Completed,Volunteer A
+3,Transport Support,Gaya,7,Logistics,Assigned,Volunteer A
+4,Teaching Support,Patna,6,Teaching,Open,
+5,Medical Emergency,Gaya,9,Medical,Open,
+6,Medical,dumka,10,Medical,Open,
+7,Medical,khudisar,8,Medical,Open,
+8,Medical,dumka ,8,Medical,Open,
+9,Shelter,need shelter urgent,6,Shelter,Open,
+10,Rescue,Kedarnath,10,Rescue,Completed,Volunteer A
+11,Food & water,deoghar,8,Food & water,Completed,Volunteer A
