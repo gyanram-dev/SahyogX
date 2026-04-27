@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { PageHeader, StatCard, Card, Badge } from "@/components/portal/PortalLayout";
+import { apiUrl } from "@/lib/api";
 import {
   Target,
   Users,
@@ -56,7 +57,7 @@ function VolunteerHome() {
 
   const loadTasks = async () => {
     try {
-      const res = await fetch("http://127.0.0.1:8000/volunteer/tasks");
+      const res = await fetch(apiUrl("/volunteer/tasks"));
       if (!res.ok) {
         throw new Error(`Task fetch failed with status ${res.status}`);
       }
@@ -81,7 +82,7 @@ function VolunteerHome() {
     try {
       setActionId(id);
       setMessage("");
-      const res = await fetch(`http://127.0.0.1:8000/volunteer/${action}/${id}`, {
+      const res = await fetch(apiUrl(`/volunteer/${action}/${id}`), {
         method: "POST",
       });
 

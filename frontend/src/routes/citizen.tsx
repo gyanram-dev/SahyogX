@@ -11,6 +11,7 @@ import {
   Clock3,
   ClipboardCheck,
 } from "lucide-react";
+import { apiUrl } from "@/lib/api";
 
 export const Route = createFileRoute("/citizen")({
   head: () => ({ meta: [{ title: "Raise a Request - Citizen" }] }),
@@ -94,7 +95,7 @@ function Citizen() {
       setMessage("");
       setReceipt(null);
 
-      const res = await fetch("http://127.0.0.1:8000/request", {
+      const res = await fetch(apiUrl("/request"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
