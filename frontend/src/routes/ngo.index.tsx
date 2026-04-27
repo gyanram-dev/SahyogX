@@ -16,6 +16,7 @@ import {
   ArrowRight,
   ClipboardList,
 } from "lucide-react";
+import { apiUrl } from "@/lib/api";
 
 type RequestStatus =
   | "Raised"
@@ -62,7 +63,7 @@ function NgoDashboard() {
 
   const loadRequests = async () => {
     try {
-      const res = await fetch("http://127.0.0.1:8000/requests");
+      const res = await fetch(apiUrl("/requests"));
       const data = await res.json();
       setRequests(Array.isArray(data) ? data : []);
     } catch (error) {
@@ -88,7 +89,7 @@ function NgoDashboard() {
       setActionId(`${action}-${id}`);
       setMessage("");
 
-      const res = await fetch(`http://127.0.0.1:8000/${action}/${id}`, {
+      const res = await fetch(apiUrl(`/${action}/${id}`), {
         method: "POST",
       });
 
