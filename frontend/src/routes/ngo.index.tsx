@@ -5,7 +5,7 @@ import {
   StatCard,
   Card,
   Badge,
-} from "../components/portal/PortalLayout";
+} from "@/components/portal/PortalLayout";
 import {
   AlertTriangle,
   Users,

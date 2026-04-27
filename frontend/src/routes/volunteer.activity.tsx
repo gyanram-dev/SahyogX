@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { PageHeader, Card, Badge } from "../components/portal/PortalLayout";
+import { PageHeader, Card, Badge } from "@/components/portal/PortalLayout";
 import { CheckCircle2, Clock } from "lucide-react";
 
 export const Route = createFileRoute("/volunteer/activity")({
