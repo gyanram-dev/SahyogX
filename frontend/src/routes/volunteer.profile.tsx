@@ -2,10 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PageHeader, Card, Badge } from "@/components/portal/PortalLayout";
 
 export const Route = createFileRoute("/volunteer/profile")({
-  head: () => ({ meta: [{ title: "Profile — Volunteer" }] }),
+  head: () => ({ meta: [{ title: "Profile - Volunteer" }] }),
   component: () => (
     <>
-      <PageHeader title="Profile" subtitle="Manage your skills, availability and badges." />
+      <PageHeader title="Profile" subtitle="Manage verified skills, availability, and response readiness." />
       <div className="grid lg:grid-cols-3 gap-6">
         <Card>
           <div className="flex items-center gap-4">
@@ -36,7 +36,7 @@ export const Route = createFileRoute("/volunteer/profile")({
           <div className="mt-6 grid sm:grid-cols-2 gap-4">
             <div className="p-4 rounded-xl border border-border">
               <div className="text-xs text-muted-foreground">Weekday window</div>
-              <div className="font-medium mt-1">6pm – 10pm</div>
+              <div className="font-medium mt-1">6 PM - 10 PM</div>
             </div>
             <div className="p-4 rounded-xl border border-border">
               <div className="text-xs text-muted-foreground">Weekend window</div>

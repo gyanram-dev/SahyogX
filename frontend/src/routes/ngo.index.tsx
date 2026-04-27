@@ -15,13 +15,44 @@ import {
   TrendingUp,
 } from "lucide-react";
 
+type RequestStatus =
+  | "Raised"
+  | "Under Review"
+  | "Assigned"
+  | "Accepted"
+  | "Completed"
+  | "Closed"
+  | string;
+
+type HelpRequest = {
+  id: number;
+  need_type?: string;
+  location?: string;
+  urgency?: number;
+  status?: RequestStatus;
+};
+
+type BadgeTone = "blue" | "emerald" | "amber" | "rose" | "neutral";
+
+const statusTone = (status?: RequestStatus): BadgeTone => {
+  if (status === "Raised") return "rose";
+  if (status === "Under Review") return "amber";
+  if (status === "Assigned") return "blue";
+  if (status === "Accepted") return "emerald";
+  if (status === "Completed") return "emerald";
+  if (status === "Closed") return "neutral";
+  return "neutral";
+};
+
 export const Route = createFileRoute("/ngo/")({
-  head: () => ({ meta: [{ title: "Dashboard — NGO Command Center" }] }),
+  head: () => ({ meta: [{ title: "Dashboard - NGO Command Center" }] }),
   component: NgoDashboard,
 });
 
 function NgoDashboard() {
-  const [requests, setRequests] = useState<any[]>([]);
+  const [requests, setRequests] = useState<HelpRequest[]>([]);
+  const [actionId, setActionId] = useState<string | null>(null);
+  const [message, setMessage] = useState("");
 
   const loadRequests = async () => {
     try {
@@ -41,14 +72,21 @@ function NgoDashboard() {
     return () => window.clearInterval(interval);
   }, []);
 
-  const assignRequest = async (id: number) => {
+  const updateRequest = async (
+    id: number,
+    action: "review" | "assign" | "close",
+    successMessage: string,
+  ) => {
     try {
-      const res = await fetch(`http://127.0.0.1:8000/assign/${id}`, {
+      setActionId(`${action}-${id}`);
+      setMessage("");
+
+      const res = await fetch(`http://127.0.0.1:8000/${action}/${id}`, {
         method: "POST",
       });
 
       if (!res.ok) {
-        throw new Error(`Assignment failed with status ${res.status}`);
+        throw new Error(`Request update failed with status ${res.status}`);
       }
 
       const data = await res.json();
@@ -60,11 +98,28 @@ function NgoDashboard() {
         );
       }
 
+      setMessage(successMessage);
       await loadRequests();
     } catch (error) {
       console.log(error);
+      setMessage("Action failed. Please try again.");
+    } finally {
+      setActionId(null);
     }
   };
+
+  const totalRequests = requests.length;
+  const pendingRequests = requests.filter((r) =>
+    ["Raised", "Under Review"].includes(r.status || ""),
+  ).length;
+  const assignedRequests = requests.filter((r) =>
+    ["Assigned", "Accepted"].includes(r.status || ""),
+  ).length;
+  const completedRequests = requests.filter((r) =>
+    ["Completed", "Closed"].includes(r.status || ""),
+  ).length;
+  const completionRate =
+    totalRequests === 0 ? 0 : Math.round((completedRequests / totalRequests) * 100);
 
   return (
     <>
@@ -78,38 +133,44 @@ function NgoDashboard() {
         }
       />
 
+      {message && (
+        <div className="mb-4 rounded-xl border border-[oklch(0.7_0.16_160_/_0.35)] bg-[oklch(0.7_0.16_160_/_0.1)] px-4 py-3 text-sm font-medium text-[oklch(0.45_0.16_160)]">
+          {message}
+        </div>
+      )}
+
       {/* Stats */}
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <StatCard
-          label="Open Requests"
-          value={String(requests.length)}
+          label="Total Requests"
+          value={String(totalRequests)}
           delta="Live"
           icon={AlertTriangle}
-          tone="rose"
-        />
-
-        <StatCard
-          label="Active Volunteers"
-          value="214"
-          delta="+18"
-          icon={Users}
-          tone="emerald"
-        />
-
-        <StatCard
-          label="Avg Response"
-          value="9m 24s"
-          delta="-1m 12s"
-          icon={Activity}
           tone="blue"
         />
 
         <StatCard
-          label="Match Accuracy"
-          value="93.4%"
-          delta="+1.2%"
-          icon={TrendingUp}
+          label="Pending Requests"
+          value={String(pendingRequests)}
+          delta="Raised + review"
+          icon={Users}
           tone="amber"
+        />
+
+        <StatCard
+          label="Assigned Requests"
+          value={String(assignedRequests)}
+          delta="Active"
+          icon={Activity}
+          tone="emerald"
+        />
+
+        <StatCard
+          label="Completed Requests"
+          value={String(completedRequests)}
+          delta={`${completionRate}% rate`}
+          icon={TrendingUp}
+          tone="rose"
         />
       </div>
 
@@ -123,11 +184,11 @@ function NgoDashboard() {
                 Live Operations Map
               </h3>
               <p className="text-xs text-muted-foreground mt-0.5">
-                Realtime requests · volunteers · zones
+                Live requests, volunteers, and zones
               </p>
             </div>
 
-            <Badge tone="emerald">● Live</Badge>
+            <Badge tone="emerald">Live</Badge>
           </div>
 
           <div className="relative h-80 mx-6 mb-6 rounded-xl overflow-hidden border border-border bg-[oklch(0.97_0.01_250)]">
@@ -200,9 +261,9 @@ function NgoDashboard() {
                 No live requests yet
               </div>
             ) : (
-              requests.map((r, i) => (
+              requests.map((r) => (
                 <div
-                  key={i}
+                  key={r.id}
                   className="p-3 rounded-xl border border-border hover:bg-muted/40 transition"
                 >
                   <div className="flex justify-between gap-3">
@@ -215,24 +276,59 @@ function NgoDashboard() {
                         {r.location || "Unknown location"}
                       </div>
 
-                      {r.status && (
-                        <div className="text-xs mt-1 text-emerald-600 font-medium">
-                          {r.status}
-                        </div>
-                      )}
+                      <div className="mt-2">
+                        <Badge tone={statusTone(r.status)}>
+                          {r.status || "Raised"}
+                        </Badge>
+                      </div>
                     </div>
 
-                    <div className="text-right space-y-2">
+                    <div className="text-right space-y-2 min-w-[128px]">
                       <div className="text-xs text-muted-foreground">
                         Urgency {r.urgency}
                       </div>
 
-                      <button
-                        onClick={() => assignRequest(r.id)}
-                        className="px-3 py-1.5 rounded-lg text-xs bg-blue-600 text-white hover:bg-blue-700"
-                      >
-                        Assign
-                      </button>
+                      <div className="flex flex-col gap-1.5">
+                        {r.status === "Raised" && (
+                          <button
+                            onClick={() =>
+                              updateRequest(
+                                r.id,
+                                "review",
+                                "Request moved to Under Review.",
+                              )
+                            }
+                            disabled={actionId === `review-${r.id}`}
+                            className="px-3 py-1.5 rounded-lg text-xs border border-border bg-card hover:bg-muted disabled:opacity-50"
+                          >
+                            {actionId === `review-${r.id}` ? "Reviewing..." : "Review"}
+                          </button>
+                        )}
+
+                        {(r.status === "Raised" || r.status === "Under Review") && (
+                          <button
+                            onClick={() =>
+                              updateRequest(r.id, "assign", "Request assigned.")
+                            }
+                            disabled={actionId === `assign-${r.id}`}
+                            className="px-3 py-1.5 rounded-lg text-xs bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
+                          >
+                            {actionId === `assign-${r.id}` ? "Assigning..." : "Assign"}
+                          </button>
+                        )}
+
+                        {r.status === "Completed" && (
+                          <button
+                            onClick={() =>
+                              updateRequest(r.id, "close", "Completed request closed.")
+                            }
+                            disabled={actionId === `close-${r.id}`}
+                            className="px-3 py-1.5 rounded-lg text-xs bg-foreground text-background hover:opacity-90 disabled:opacity-50"
+                          >
+                            {actionId === `close-${r.id}` ? "Closing..." : "Close"}
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -312,8 +408,13 @@ function NgoDashboard() {
                     </div>
                   </div>
 
-                  <div className="text-xs text-muted-foreground">
-                    Urgency {r.urgency}
+                  <div className="text-right space-y-1">
+                    <Badge tone={statusTone(r.status)}>
+                      {r.status || "Raised"}
+                    </Badge>
+                    <div className="text-xs text-muted-foreground">
+                      Urgency {r.urgency}
+                    </div>
                   </div>
                 </div>
               ))

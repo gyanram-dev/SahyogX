@@ -29,10 +29,14 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "SahyogX AI — The right help, in the right place, in seconds" },
-      { name: "description", content: "AI-powered platform connecting citizens, volunteers, and NGOs to deliver help where it matters most." },
-      { name: "author", content: "SahyogX AI" },
-      { property: "og:title", content: "SahyogX AI — Coordinated relief, intelligently allocated" },
+      { title: "SahyogX - The right help, in the right place, faster" },
+      {
+        name: "description",
+        content:
+          "A live coordination platform connecting citizens, volunteers, and NGOs through a clear relief workflow.",
+      },
+      { name: "author", content: "SahyogX" },
+      { property: "og:title", content: "SahyogX - Coordinated relief with clear operational visibility" },
       { property: "og:description", content: "Realtime emergency coordination for citizens, volunteers and NGOs." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

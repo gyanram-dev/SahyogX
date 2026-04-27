@@ -1,10 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { PageHeader, StatCard, Card, Badge } from "@/components/portal/PortalLayout";
-import { Clock, Target, Award, Users, MapPin, ArrowRight, CheckCircle2 } from "lucide-react";
+import { Target, Users, MapPin, ArrowRight, CheckCircle2, AlertTriangle, Activity } from "lucide-react";
 
 export const Route = createFileRoute("/volunteer/")({
-  head: () => ({ meta: [{ title: "Volunteer Home - SahyogX AI" }] }),
+  head: () => ({ meta: [{ title: "Volunteer Home - SahyogX" }] }),
   component: VolunteerHome,
 });
 
@@ -43,6 +43,7 @@ function VolunteerHome() {
   const [tasks, setTasks] = useState<VolunteerTask[]>([]);
   const [loading, setLoading] = useState(true);
   const [actionId, setActionId] = useState<number | null>(null);
+  const [message, setMessage] = useState("");
 
   const loadTasks = async () => {
     try {
@@ -71,6 +72,7 @@ function VolunteerHome() {
   const updateTask = async (id: number, action: "accept" | "complete") => {
     try {
       setActionId(id);
+      setMessage("");
       const res = await fetch(`http://127.0.0.1:8000/volunteer/${action}/${id}`, {
         method: "POST",
       });
@@ -80,26 +82,37 @@ function VolunteerHome() {
       }
 
       await loadTasks();
+      setMessage(action === "accept" ? "Task accepted." : "Task marked complete.");
     } catch (error) {
       console.log(error);
+      setMessage("Action failed. Please try again.");
     } finally {
       setActionId(null);
     }
   };
 
   const acceptedCount = tasks.filter((task) => task.status === "Accepted").length;
+  const assignedCount = tasks.filter((task) => task.status === "Assigned").length;
+  const criticalCount = tasks.filter((task) => task.urgency >= 9).length;
+  const activeRate =
+    tasks.length === 0 ? 0 : Math.round((acceptedCount / tasks.length) * 100);
 
   return (
     <>
       <PageHeader
         title="Welcome back, Aarav"
-        subtitle={`${tasks.length} assigned tasks are ready in your queue. You're 2 missions away from the Bronze badge.`}
+        subtitle={`${tasks.length} live tasks are in the volunteer queue right now.`}
       />
+      {message && (
+        <div className="mb-4 rounded-xl border border-[oklch(0.7_0.16_160_/_0.35)] bg-[oklch(0.7_0.16_160_/_0.1)] px-4 py-3 text-sm font-medium text-[oklch(0.45_0.16_160)]">
+          {message}
+        </div>
+      )}
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <StatCard label="Hours contributed" value="42" delta="+6 this wk" icon={Clock} tone="blue" />
         <StatCard label="Active tasks" value={String(tasks.length)} delta={loading ? "Syncing" : "Live"} icon={Target} tone="emerald" />
-        <StatCard label="Reliability score" value="A+" icon={Award} tone="amber" />
-        <StatCard label="Accepted now" value={String(acceptedCount)} delta="+12 helped" icon={Users} tone="rose" />
+        <StatCard label="Awaiting acceptance" value={String(assignedCount)} delta="Assigned" icon={Users} tone="blue" />
+        <StatCard label="In progress" value={String(acceptedCount)} delta={`${activeRate}% active`} icon={Activity} tone="amber" />
+        <StatCard label="Critical priority" value={String(criticalCount)} delta="Urgency 9+" icon={AlertTriangle} tone="rose" />
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6">
@@ -147,7 +160,9 @@ function VolunteerHome() {
                       disabled={task.status !== "Assigned" || actionId === task.id}
                       className="text-xs font-medium px-3 py-2 rounded-lg gradient-emerald text-white shadow-soft hover:shadow-elevated transition disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      Accept Task
+                      {actionId === task.id && task.status === "Assigned"
+                        ? "Accepting..."
+                        : "Accept Task"}
                     </button>
                     <button
                       onClick={() => updateTask(task.id, "complete")}
@@ -155,7 +170,9 @@ function VolunteerHome() {
                       className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg border border-border bg-card hover:bg-muted transition disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <CheckCircle2 className="h-3.5 w-3.5" />
-                      Mark Complete
+                      {actionId === task.id && task.status === "Accepted"
+                        ? "Completing..."
+                        : "Mark Complete"}
                     </button>
                   </div>
                 </div>
@@ -165,23 +182,38 @@ function VolunteerHome() {
         </Card>
 
         <Card>
-          <h3 className="font-semibold tracking-tight">Your impact</h3>
-          <p className="text-xs text-muted-foreground mt-0.5">This month</p>
+          <h3 className="font-semibold tracking-tight">Queue overview</h3>
+          <p className="text-xs text-muted-foreground mt-0.5">Derived from live volunteer tasks</p>
           <div className="mt-6 space-y-5">
             {[
-              { label: "Missions completed", v: "11 / 15", p: 73, tone: "emerald" },
-              { label: "Avg. response time", v: "12 min", p: 88, tone: "blue" },
-              { label: "Skill coverage", v: "5 / 7", p: 71, tone: "amber" },
-            ].map((r) => (
-              <div key={r.label}>
+              {
+                label: "Awaiting acceptance",
+                value: `${assignedCount} task${assignedCount === 1 ? "" : "s"}`,
+                width: tasks.length === 0 ? 0 : Math.round((assignedCount / tasks.length) * 100),
+                tone: "blue",
+              },
+              {
+                label: "Accepted and in progress",
+                value: `${acceptedCount} task${acceptedCount === 1 ? "" : "s"}`,
+                width: tasks.length === 0 ? 0 : Math.round((acceptedCount / tasks.length) * 100),
+                tone: "emerald",
+              },
+              {
+                label: "Critical urgency",
+                value: `${criticalCount} task${criticalCount === 1 ? "" : "s"}`,
+                width: tasks.length === 0 ? 0 : Math.round((criticalCount / tasks.length) * 100),
+                tone: "amber",
+              },
+            ].map((metric) => (
+              <div key={metric.label}>
                 <div className="flex items-center justify-between text-xs mb-1.5">
-                  <span className="text-muted-foreground">{r.label}</span>
-                  <span className="font-medium">{r.v}</span>
+                  <span className="text-muted-foreground">{metric.label}</span>
+                  <span className="font-medium">{metric.value}</span>
                 </div>
                 <div className="h-1.5 rounded-full bg-muted overflow-hidden">
                   <div
-                    className={`h-full rounded-full ${r.tone === "emerald" ? "gradient-emerald" : r.tone === "blue" ? "gradient-brand" : "gradient-amber"}`}
-                    style={{ width: `${r.p}%` }}
+                    className={`h-full rounded-full ${metric.tone === "emerald" ? "gradient-emerald" : metric.tone === "blue" ? "gradient-brand" : "gradient-amber"}`}
+                    style={{ width: `${metric.width}%` }}
                   />
                 </div>
               </div>

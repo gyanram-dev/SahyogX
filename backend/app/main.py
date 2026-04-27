@@ -32,11 +32,103 @@ VOLUNTEERS_FILE = DATA_DIR / "volunteers.csv"
 requests_df = pd.read_csv(REQUESTS_FILE)
 volunteers_df = pd.read_csv(VOLUNTEERS_FILE)
 
+VALID_STATUSES = {
+    "Raised",
+    "Under Review",
+    "Assigned",
+    "Accepted",
+    "Completed",
+    "Closed",
+}
+
+LEGACY_STATUS_MAP = {
+    "Open": "Raised",
+}
+
+
+def normalize_text(value):
+    if pd.isna(value):
+        return ""
+    return " ".join(str(value).strip().lower().split())
+
+
+def skill_match_score(request_skill: str, volunteer_skill: str):
+    request_value = normalize_text(request_skill)
+    volunteer_value = normalize_text(volunteer_skill)
+
+    if not request_value or not volunteer_value:
+        return 0
+
+    if request_value == volunteer_value:
+        return 40
+
+    request_tokens = set(request_value.replace("&", " ").replace("/", " ").split())
+    volunteer_tokens = set(volunteer_value.replace("&", " ").replace("/", " ").split())
+
+    if request_tokens & volunteer_tokens:
+        return 28
+
+    if request_value in volunteer_value or volunteer_value in request_value:
+        return 20
+
+    return 0
+
+
+def active_assigned_volunteers():
+    normalize_requests_df()
+    active_rows = requests_df[requests_df["status"].isin(["Assigned", "Accepted"])]
+    return {
+        normalize_text(name)
+        for name in active_rows["assigned_to"].dropna().tolist()
+        if normalize_text(name)
+    }
+
+
+def select_best_volunteer(request_row):
+    busy_volunteers = active_assigned_volunteers()
+    available_volunteers = volunteers_df[
+        volunteers_df["availability"].astype(str).str.strip().str.lower() == "yes"
+    ].copy()
+
+    if available_volunteers.empty:
+        return None
+
+    primary_pool = available_volunteers[
+        ~available_volunteers["name"].map(normalize_text).isin(busy_volunteers)
+    ]
+    candidate_pool = primary_pool if not primary_pool.empty else available_volunteers
+
+    best_score = -1
+    best_volunteer = None
+
+    request_location = normalize_text(request_row.get("location"))
+    request_skill = request_row.get("skill_required") or request_row.get("need_type")
+    request_urgency = int(request_row.get("urgency", 0) or 0)
+
+    for _, volunteer in candidate_pool.iterrows():
+        volunteer_location = normalize_text(volunteer.get("location"))
+        reliability = int(volunteer.get("reliability", 0) or 0)
+
+        score = reliability + request_urgency
+
+        if request_location and request_location == volunteer_location:
+            score += 50
+
+        score += skill_match_score(request_skill, volunteer.get("skill"))
+
+        if score > best_score:
+            best_score = score
+            best_volunteer = volunteer
+
+    return best_volunteer
+
 def normalize_requests_df():
     global requests_df
+    changed = False
 
     if "id" not in requests_df.columns:
         requests_df.insert(0, "id", range(1, len(requests_df) + 1))
+        changed = True
 
     requests_df["id"] = pd.to_numeric(requests_df["id"], errors="coerce")
 
@@ -44,17 +136,29 @@ def normalize_requests_df():
     for idx, value in requests_df["id"].items():
         if pd.isna(value):
             requests_df.at[idx, "id"] = next_id
+            changed = True
         next_id = max(next_id, int(requests_df.at[idx, "id"]) + 1)
 
     requests_df["id"] = requests_df["id"].astype(int)
 
     if "status" not in requests_df.columns:
-        requests_df["status"] = "Open"
+        requests_df["status"] = "Raised"
+        changed = True
     else:
-        requests_df["status"] = requests_df["status"].fillna("Open")
+        original_status = requests_df["status"].copy()
+        requests_df["status"] = (
+            requests_df["status"]
+            .fillna("Raised")
+            .replace(LEGACY_STATUS_MAP)
+        )
+        invalid_statuses = ~requests_df["status"].isin(VALID_STATUSES)
+        if invalid_statuses.any():
+            requests_df.loc[invalid_statuses, "status"] = "Raised"
+        changed = changed or not requests_df["status"].equals(original_status)
 
     if "assigned_to" not in requests_df.columns:
         requests_df["assigned_to"] = None
+        changed = True
 
     if requests_df["id"].duplicated().any():
         seen_ids = set()
@@ -64,10 +168,13 @@ def normalize_requests_df():
             if request_id in seen_ids:
                 requests_df.at[idx, "id"] = next_id
                 next_id += 1
+                changed = True
             else:
                 seen_ids.add(request_id)
 
         requests_df["id"] = requests_df["id"].astype(int)
+
+    if changed:
         requests_df.to_csv(REQUESTS_FILE, index=False)
 
 
@@ -91,6 +198,9 @@ def request_record(row_index: int):
 
 def update_request_status(request_id: int, status: str):
     global requests_df
+    if status not in VALID_STATUSES:
+        raise HTTPException(status_code=400, detail="Invalid request status")
+
     normalize_requests_df()
 
     matches = requests_df.index[requests_df["id"] == request_id].tolist()
@@ -147,68 +257,85 @@ def add_request(data: RequestInput):
         "location": data.location,
         "urgency": data.urgency,
         "skill_required": data.skill_required,
-        "status": "Open",
+        "status": "Raised",
         "assigned_to": None,
     }])
 
     requests_df = pd.concat([requests_df, new_row], ignore_index=True)
     requests_df.to_csv(REQUESTS_FILE, index=False)
 
-    return {"message": "Request added successfully"}
+    created_row_index = requests_df.index[-1]
+    return {
+        "message": "Request added successfully",
+        "request": request_record(created_row_index),
+    }
+
+@app.post("/review/{request_id}")
+def review_request(request_id: int):
+    request = update_request_status(request_id, "Under Review")
+    return {"message": "Request moved to review", "request": request}
 
 @app.get("/allocate")
 def allocate():
     global requests_df, volunteers_df
 
     assignments = []
-
-    used_volunteers = set()
+    normalize_requests_df()
 
     for _, req in requests_df.iterrows():
-        best_score = -1
-        best_person = None
+        best_volunteer = select_best_volunteer(req)
+        best_person = best_volunteer["name"] if best_volunteer is not None else None
+        best_score = None
 
-        for _, vol in volunteers_df.iterrows():
+        if best_volunteer is not None:
+            best_score = (
+                int(best_volunteer.get("reliability", 0) or 0)
+                + int(req.get("urgency", 0) or 0)
+            )
 
-            if vol["name"] in used_volunteers:
-                continue
+            if normalize_text(req.get("location")) == normalize_text(best_volunteer.get("location")):
+                best_score += 50
 
-            score = 0
-
-            if req["location"] == vol["location"]:
-                score += 50
-
-            if req["skill_required"].lower() == vol["skill"].lower():
-                score += 40
-
-            score += int(req["urgency"])
-
-            if score > best_score:
-                best_score = score
-                best_person = vol["name"]
-
-        if best_person:
-            used_volunteers.add(best_person)
+            best_score += skill_match_score(
+                req.get("skill_required") or req.get("need_type"),
+                best_volunteer.get("skill"),
+            )
 
         assignments.append({
             "request": req["need_type"],
             "location": req["location"],
             "assigned_volunteer": best_person if best_person else "Unassigned",
-            "score": best_score
+            "score": best_score if best_score is not None else 0
         })
 
     return {"assignments": assignments}
 @app.post("/assign/{request_id}")
 def assign_request(request_id: int):
     global requests_df
+    normalize_requests_df()
+
+    matches = requests_df.index[requests_df["id"] == request_id].tolist()
+    if not matches:
+        raise HTTPException(status_code=404, detail="Request not found")
+
+    row_index = matches[0]
+    selected_volunteer = select_best_volunteer(requests_df.loc[row_index])
+
+    if selected_volunteer is None:
+        raise HTTPException(status_code=409, detail="No available volunteer found")
+
     request = update_request_status(request_id, "Assigned")
 
-    row_index = requests_df.index[requests_df["id"] == request_id].tolist()[0]
-    requests_df.at[row_index, "assigned_to"] = "Volunteer A"
+    requests_df.at[row_index, "assigned_to"] = selected_volunteer["name"]
     requests_df.to_csv(REQUESTS_FILE, index=False)
     request = request_record(row_index)
 
     return {"message": "Assigned successfully", "request": request}
+
+@app.post("/close/{request_id}")
+def close_request(request_id: int):
+    request = update_request_status(request_id, "Closed")
+    return {"message": "Request closed successfully", "request": request}
 
 @app.post("/volunteer/accept/{request_id}")
 def accept_volunteer_task(request_id: int):

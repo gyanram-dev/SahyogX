@@ -3,12 +3,12 @@ import { PageHeader, Card, Badge } from "@/components/portal/PortalLayout";
 import { MapPin, Filter } from "lucide-react";
 
 export const Route = createFileRoute("/volunteer/opportunities")({
-  head: () => ({ meta: [{ title: "Opportunities — Volunteer" }] }),
+  head: () => ({ meta: [{ title: "Opportunities - Volunteer" }] }),
   component: Opportunities,
 });
 
 const items = [
-  { t: "Flood relief — sandbag stacking", org: "RiverGuard", urg: "Critical", match: 98, dist: "1.2 km", skills: ["Lifting", "Outdoor"] },
+  { t: "Flood relief - sandbag support", org: "RiverGuard", urg: "Critical", match: 98, dist: "1.2 km", skills: ["Lifting", "Outdoor"] },
   { t: "Blood donation drive coordinator", org: "RedCare", urg: "High", match: 92, dist: "2.7 km", skills: ["Coordination"] },
   { t: "Translate hotline calls (Hindi/Tamil)", org: "VoiceLine", urg: "High", match: 90, dist: "Remote", skills: ["Languages"] },
   { t: "Pack hygiene kits", org: "CleanStart", urg: "Medium", match: 85, dist: "0.5 km", skills: ["Logistics"] },
@@ -21,7 +21,7 @@ function Opportunities() {
     <>
       <PageHeader
         title="Opportunities"
-        subtitle="Live tasks across NGOs near you, intelligently ranked."
+        subtitle="Available missions from verified NGOs, ranked by fit and urgency."
         action={
           <button className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-border bg-card text-sm font-medium hover:bg-muted">
             <Filter className="h-4 w-4" /> Filter
@@ -44,7 +44,7 @@ function Opportunities() {
               {i.skills.map((s) => <Badge key={s} tone="neutral">{s}</Badge>)}
             </div>
             <button className="mt-5 w-full text-sm font-medium py-2 rounded-lg gradient-emerald text-white shadow-soft">
-              Join task
+              View mission
             </button>
           </Card>
         ))}
