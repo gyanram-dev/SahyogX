@@ -31,11 +31,11 @@ import heroTeam from "@/assets/hero-team.png";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "SahyogX AI — The Right Help. In The Right Place. In Seconds." },
+      { title: "SahyogX - Coordinate Relief Faster, With Clarity and Accountability" },
       {
         name: "description",
         content:
-          "AI-powered platform connecting citizens, volunteers, and NGOs instantly. Coordinate emergency relief in seconds.",
+          "A live coordination platform for citizen requests, NGO triage, volunteer dispatch, and end-to-end relief tracking.",
       },
     ],
   }),
@@ -78,24 +78,24 @@ function Counter({
 
 const ctas = [
   {
-    title: "Raise Request",
-    desc: "Citizens report emergencies in seconds.",
+    title: "Request Help",
+    desc: "Submit verified needs with urgency and location.",
     icon: Siren,
     to: "/citizen",
     gradient: "from-[oklch(0.78_0.18_55)] to-[oklch(0.65_0.22_30)]",
     ring: "oklch(0.7 0.2 40 / 0.35)",
   },
   {
-    title: "Join as Volunteer",
-    desc: "Find nearby tasks matched to your skills.",
+    title: "Accept Missions",
+    desc: "Receive tasks matched to your skills and availability.",
     icon: HeartHandshake,
     to: "/volunteer",
     gradient: "from-[oklch(0.72_0.16_160)] to-[oklch(0.6_0.18_180)]",
     ring: "oklch(0.7 0.16 160 / 0.35)",
   },
   {
-    title: "NGO Dashboard",
-    desc: "Coordinate relief with realtime intelligence.",
+    title: "Run Operations",
+    desc: "Triage, assign, and close requests from one command center.",
     icon: Building2,
     to: "/ngo",
     gradient: "from-[oklch(0.62_0.18_255)] to-[oklch(0.42_0.2_275)]",
@@ -193,7 +193,7 @@ function LiveDashboard() {
             <span className="h-2.5 w-2.5 rounded-full bg-[oklch(0.72_0.17_162)]" />
           </div>
           <span className="ml-3 text-[11px] font-medium text-muted-foreground">
-            sahyogx.ai / command-center
+            sahyogx / command-center
           </span>
         </div>
         <div className="flex items-center gap-3 text-[11px] text-muted-foreground">
@@ -365,7 +365,7 @@ function LiveDashboard() {
         <div className="lg:col-span-2 rounded-2xl border border-border bg-background/70 p-4">
           <div className="flex items-center justify-between mb-3">
             <div className="text-sm font-semibold tracking-tight">Recent requests</div>
-            <span className="text-[10.5px] text-muted-foreground">Auto-matching · live</span>
+            <span className="text-[10.5px] text-muted-foreground">Coordinated live</span>
           </div>
           <div className="space-y-2">
             {requests.map((r, i) => (
@@ -597,7 +597,7 @@ function Index() {
             <Sparkles className="h-4 w-4 text-white" />
           </div>
           <span className="font-semibold tracking-tight text-[15px]">
-            SahyogX <span className="text-muted-foreground font-normal">AI</span>
+            SahyogX <span className="text-muted-foreground font-normal">Coordination</span>
           </span>
         </Link>
         <div className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
@@ -618,7 +618,7 @@ function Index() {
           to="/ngo"
           className="text-sm font-medium px-4 py-2 rounded-xl bg-foreground text-background hover:opacity-90 transition shadow-soft"
         >
-          Open command center
+          Open Command Center
         </Link>
       </nav>
 
@@ -641,20 +641,20 @@ function Index() {
                 <span className="absolute inline-flex h-full w-full rounded-full bg-[oklch(0.72_0.17_162)] opacity-60 animate-ping" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-[oklch(0.72_0.17_162)]" />
               </span>
-              Live in 14 cities · 2,847 volunteers active now
+              Live relief coordination · Verified NGO and volunteer network
             </motion.div>
 
             <h1 className="text-[2.6rem] leading-[1.05] sm:text-5xl lg:text-[4.5rem] lg:leading-[1.02] font-semibold tracking-tight">
-              The Right Help.
+              Coordinate Relief.
               <br />
-              In The <span className="text-gradient-brand">Right Place</span>.
+              Dispatch The <span className="text-gradient-brand">Right Team</span>.
               <br />
-              In Seconds.
+              Track Every Outcome.
             </h1>
 
             <p className="mt-5 text-base sm:text-lg text-muted-foreground max-w-xl mx-auto lg:mx-0">
-              AI-powered platform connecting citizens, volunteers, and NGOs instantly —
-              orchestrating every emergency request with the closest, most capable responder.
+              SahyogX turns citizen requests into accountable field action, helping NGOs triage,
+              assign, and monitor relief work from one live command layer.
             </p>
 
             <div className="mt-7 flex flex-wrap items-center gap-3 justify-center lg:justify-start">
@@ -662,20 +662,20 @@ function Index() {
                 to="/citizen"
                 className="cta-glow group inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold text-white shadow-elevated bg-gradient-to-br from-[oklch(0.78_0.19_55)] to-[oklch(0.65_0.21_38)] hover:opacity-95 transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.97]"
               >
-                <Siren className="h-4 w-4" /> Raise Request
+                <Siren className="h-4 w-4" /> Request Help Now
                 <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition" />
               </Link>
               <Link
                 to="/volunteer"
                 className="group inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold text-white shadow-soft bg-gradient-to-br from-[oklch(0.72_0.17_162)] to-[oklch(0.6_0.15_195)] hover:opacity-95 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-elevated active:scale-[0.97]"
               >
-                <HeartHandshake className="h-4 w-4" /> Join as Volunteer
+                <HeartHandshake className="h-4 w-4" /> Start Volunteering
               </Link>
               <Link
                 to="/ngo"
                 className="group inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold text-foreground bg-card border border-border hover:bg-muted/50 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-soft active:scale-[0.97]"
               >
-                <Building2 className="h-4 w-4" /> NGO Dashboard
+                <Building2 className="h-4 w-4" /> View Command Center
               </Link>
             </div>
 
@@ -701,7 +701,7 @@ function Index() {
                     className="h-3.5 w-3.5 fill-[oklch(0.82_0.16_75)] text-[oklch(0.82_0.16_75)]"
                   />
                 ))}
-                <span className="ml-1">Trusted by 60+ NGOs across India</span>
+                <span className="ml-1">Built for transparent, auditable relief operations</span>
               </div>
             </div>
           </motion.div>
@@ -842,17 +842,17 @@ function Index() {
         </motion.div>
       </section>
 
-      {/* ============== HOW AI WORKS — 3 STEPS ============== */}
+      {/* ============== HOW IT WORKS — 3 STEPS ============== */}
       <section id="how" className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 py-20">
         <motion.div {...fadeUp} className="text-center max-w-2xl mx-auto mb-14">
           <div className="inline-block text-xs font-medium px-3 py-1 rounded-full bg-muted text-muted-foreground mb-4">
-            How AI works
+            Operational workflow
           </div>
           <h2 className="text-3xl sm:text-5xl font-semibold tracking-tight">
-            From SOS to <span className="text-gradient-brand">on-site help</span> in seconds.
+            From request to <span className="text-gradient-brand">verified resolution</span>.
           </h2>
           <p className="mt-4 text-muted-foreground text-base sm:text-lg">
-            Three intelligent steps quietly orchestrate every emergency — at city scale.
+            A simple, accountable flow for intake, assignment, field execution, and closure.
           </p>
         </motion.div>
 
@@ -861,24 +861,24 @@ function Index() {
             {
               step: "01",
               icon: Send,
-              title: "Citizen raises request",
-              desc: "One tap captures location, urgency and need — with photo, voice and live status.",
+              title: "Citizen reports the need",
+              desc: "Capture category, urgency, location, and context so coordinators can act with clarity.",
               color: "oklch(0.7 0.22 30)",
               g: "from-[oklch(0.78_0.18_55)] to-[oklch(0.62_0.22_30)]",
             },
             {
               step: "02",
               icon: Brain,
-              title: "AI matches the right responder",
-              desc: "Models rank every nearby volunteer by skill, distance, reliability and availability.",
+              title: "NGO prioritizes and assigns",
+              desc: "Coordinators review each request, assign the right responder, and keep ownership visible.",
               color: "oklch(0.62 0.18 255)",
               g: "from-[oklch(0.62_0.18_255)] to-[oklch(0.42_0.2_275)]",
             },
             {
               step: "03",
               icon: Radio,
-              title: "NGO confirms relief",
-              desc: "Coordinators see, verify and dispatch — with realtime ETA, route and outcome.",
+              title: "Volunteer resolves the task",
+              desc: "Volunteers accept, complete, and update work so every request has a measurable outcome.",
               color: "oklch(0.7 0.16 160)",
               g: "from-[oklch(0.72_0.16_160)] to-[oklch(0.55_0.16_180)]",
             },
@@ -921,13 +921,13 @@ function Index() {
       >
         <motion.div {...fadeUp} className="text-center max-w-2xl mx-auto mb-12">
           <div className="inline-block text-xs font-medium px-3 py-1 rounded-full bg-muted text-muted-foreground mb-4">
-            Three portals · One mission
+            Three portals · One accountable workflow
           </div>
           <h2 className="text-3xl sm:text-5xl font-semibold tracking-tight">
-            Choose how you want to <span className="text-gradient-brand">help today</span>
+            Start from the role that matches <span className="text-gradient-brand">your responsibility</span>
           </h2>
           <p className="mt-4 text-muted-foreground text-base sm:text-lg">
-            Whether you need help, want to give it, or coordinate it — we route every action with intelligence.
+            Citizens raise verified needs, NGOs coordinate response, and volunteers complete measurable field work.
           </p>
         </motion.div>
 
@@ -955,7 +955,7 @@ function Index() {
                   <div className="font-semibold text-lg tracking-tight">{r.title}</div>
                   <p className="text-sm text-muted-foreground mt-1.5">{r.desc}</p>
                   <div className="mt-6 flex items-center text-sm font-medium gap-1 opacity-70 group-hover:opacity-100 transition">
-                    Enter portal{" "}
+                    Continue{" "}
                     <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition" />
                   </div>
                 </Link>
@@ -969,20 +969,20 @@ function Index() {
           {[
             {
               tag: "For Citizens",
-              title: "Get help in seconds, not hours",
-              desc: "Tap once to send your location, urgency and need. Our AI routes the closest, most-skilled responder while you wait — and keeps you updated every step.",
+              title: "Make urgent needs visible immediately",
+              desc: "Submit location, category, urgency, and context in one flow so NGOs can review and act without phone-chain delays.",
               img: featureCitizen,
               accent: "from-[oklch(0.78_0.18_55)] to-[oklch(0.62_0.22_30)]",
-              points: ["One-tap SOS", "Live responder ETA", "Photo & voice notes"],
+              points: ["Structured request intake", "Live status updates", "Clear urgency signals"],
               reverse: false,
             },
             {
               tag: "For Volunteers",
-              title: "Help where you matter most",
-              desc: "Get matched only to tasks that fit your skills, schedule and location. Build a verified reliability score and unlock missions that grow with you.",
+              title: "Turn intent into completed missions",
+              desc: "See assigned tasks, accept responsibility, and mark work complete so NGOs have a reliable ground-truth view.",
               img: featureVolunteer,
               accent: "from-[oklch(0.72_0.16_160)] to-[oklch(0.55_0.16_180)]",
-              points: ["Skill-based matching", "Reliability badges", "Realtime task feed"],
+              points: ["Assigned task queue", "Accept and complete workflow", "Accountable activity history"],
               reverse: true,
             },
           ].map((f) => (
@@ -1059,11 +1059,11 @@ function Index() {
             <h2 className="text-3xl sm:text-5xl font-semibold tracking-tight text-white">
               Built for the teams who{" "}
               <span className="bg-gradient-to-r from-[oklch(0.85_0.12_220)] via-white to-[oklch(0.85_0.14_165)] bg-clip-text text-transparent">
-                run the response.
+                own the outcome.
               </span>
             </h2>
             <p className="mt-4 text-white/70 text-base sm:text-lg">
-              A live operations cockpit — every request, every responder, every outcome on one screen.
+              One operational layer for triage, assignment, volunteer execution, and closure.
             </p>
           </div>
 
@@ -1076,20 +1076,20 @@ function Index() {
               <ul className="space-y-4">
               {[
                 {
-                  t: "Live operations map",
-                  d: "See every active request, route and responder in realtime.",
+                  t: "Real-time request visibility",
+                  d: "Track every open, assigned, accepted, and completed request as the situation changes.",
                 },
                 {
-                  t: "AI allocation engine",
-                  d: "Auto-assign volunteers by skill, distance and reliability.",
+                  t: "Faster field coordination",
+                  d: "Move from review to assignment with clear status ownership and fewer manual handoffs.",
                 },
                 {
-                  t: "Underserved zone alerts",
-                  d: "Spot coverage gaps before they become crises.",
+                  t: "Volunteer task accountability",
+                  d: "See which tasks are accepted, completed, and ready for NGO closure.",
                 },
                 {
                   t: "Outcome analytics",
-                  d: "Measure response time, accuracy and impact — by city, by team.",
+                  d: "Measure total volume, pending load, completed work, and response progress.",
                 },
               ].map((x) => (
                   <li key={x.t} className="flex gap-3 items-start">
@@ -1108,7 +1108,7 @@ function Index() {
                 to="/ngo"
                 className="mt-8 inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold text-white shadow-elevated bg-gradient-to-br from-[oklch(0.64_0.19_258)] to-[oklch(0.55_0.21_272)] hover:opacity-95 transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.97]"
               >
-                <Building2 className="h-4 w-4" /> Open NGO Dashboard
+                <Building2 className="h-4 w-4" /> Open Command Center
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </motion.div>
@@ -1121,14 +1121,14 @@ function Index() {
         <motion.div {...fadeUp} className="text-center max-w-2xl mx-auto mb-14">
           <div className="inline-flex items-center gap-2 text-xs font-medium px-3 py-1 rounded-full bg-muted text-muted-foreground mb-4">
             <ShieldCheck className="h-3.5 w-3.5 text-[oklch(0.64_0.19_258)]" />
-            Why teams choose SahyogX
+            Built for trust, speed, and accountability
           </div>
           <h2 className="text-3xl sm:text-5xl font-semibold tracking-tight">
-            Trusted infrastructure for{" "}
-            <span className="text-gradient-brand">humanitarian response.</span>
+            Relief operations need{" "}
+            <span className="text-gradient-brand">systems people can trust.</span>
           </h2>
           <p className="mt-4 text-muted-foreground text-base sm:text-lg">
-            Built for NGOs, volunteers, and citizens — when every second matters.
+            Designed for transparent coordination between citizens, NGOs, and field volunteers.
           </p>
         </motion.div>
 
@@ -1137,24 +1137,24 @@ function Index() {
             {
               icon: ShieldCheck,
               tag: "Trust",
-              title: "Verified Responders",
-              desc: "Background-checked volunteers and trusted NGO partners — every responder cleared before deployment.",
+              title: "Verified roles",
+              desc: "Clear role-based portals keep citizens, NGOs, and volunteers aligned around the same request status.",
               g: "from-[oklch(0.64_0.19_258)] to-[oklch(0.55_0.21_272)]",
               tint: "oklch(0.64 0.19 258)",
             },
             {
               icon: Cpu,
-              tag: "Intelligence",
-              title: "AI Matching Engine",
-              desc: "Routes the best nearby helper instantly — ranked by skill, distance, reliability and live availability.",
+              tag: "Visibility",
+              title: "Operational visibility",
+              desc: "Live analytics help teams track pending load, assigned work, and completion progress in one view.",
               g: "from-[oklch(0.72_0.17_162)] to-[oklch(0.6_0.15_195)]",
               tint: "oklch(0.72 0.17 162)",
             },
             {
               icon: Lock,
               tag: "Reliability",
-              title: "24/7 Live Operations",
-              desc: "Always-on infrastructure during emergencies — redundant systems, real-time monitoring, no downtime.",
+              title: "Traceable outcomes",
+              desc: "Every request moves through a clear lifecycle from Raised to Closed, reducing ambiguity in handoffs.",
               g: "from-[oklch(0.74_0.19_50)] to-[oklch(0.65_0.21_38)]",
               tint: "oklch(0.74 0.19 50)",
             },
@@ -1239,32 +1239,32 @@ function Index() {
 
           <div className="relative">
             <h2 className="text-3xl sm:text-6xl font-semibold tracking-tight max-w-3xl mx-auto leading-[1.05]">
-              When emergencies happen,{" "}
+              Ready to coordinate relief{" "}
               <span className="bg-gradient-to-r from-white to-[oklch(0.85_0.14_70)] bg-clip-text text-transparent">
-                seconds matter.
+                with confidence?
               </span>
             </h2>
             <p className="mt-5 text-white/80 max-w-xl mx-auto text-base sm:text-lg">
-              Join the network rebuilding how communities respond — together.
+              Launch the workflow for citizens, coordinators, and volunteers in minutes.
             </p>
             <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
               <Link
                 to="/citizen"
                 className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold bg-white text-[oklch(0.22_0.06_265)] hover:bg-white/90 transition shadow-elevated hover:-translate-y-0.5 active:scale-[0.97]"
               >
-                <Siren className="h-4 w-4" /> Raise Request
+                <Siren className="h-4 w-4" /> Request Help Now
               </Link>
               <Link
                 to="/volunteer"
                 className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold bg-white/10 text-white border border-white/20 backdrop-blur-md hover:bg-white/20 transition hover:-translate-y-0.5 active:scale-[0.97]"
               >
-                <HeartHandshake className="h-4 w-4" /> Join Volunteer Network
+                <HeartHandshake className="h-4 w-4" /> Start Volunteering
               </Link>
               <Link
                 to="/ngo"
                 className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold bg-white/10 text-white border border-white/20 backdrop-blur-md hover:bg-white/20 transition hover:-translate-y-0.5 active:scale-[0.97]"
               >
-                <Building2 className="h-4 w-4" /> Open NGO Dashboard
+                <Building2 className="h-4 w-4" /> Open Command Center
               </Link>
             </div>
           </div>
@@ -1275,7 +1275,7 @@ function Index() {
             <div className="h-6 w-6 rounded-md gradient-brand flex items-center justify-center">
               <Sparkles className="h-3 w-3 text-white" />
             </div>
-            © {new Date().getFullYear()} SahyogX AI · Built for humanitarian coordination
+            © {new Date().getFullYear()} SahyogX · Built for accountable relief coordination
           </div>
           <div className="flex items-center gap-5">
             <a className="hover:text-foreground transition" href="#">

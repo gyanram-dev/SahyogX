@@ -52,6 +52,13 @@ function Citizen() {
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [receipt, setReceipt] = useState<{
+    id: number;
+    status: string;
+    need_type: string;
+    location: string;
+  } | null>(null);
 
   const submitRequest = async () => {
     const urgencyMap = {
@@ -81,6 +88,8 @@ function Citizen() {
 
     try {
       setLoading(true);
+      setMessage("");
+      setReceipt(null);
 
       const res = await fetch("http://127.0.0.1:8000/request", {
         method: "POST",
@@ -94,9 +103,18 @@ function Citizen() {
         throw new Error("Request failed");
       }
 
-      await res.json();
+      const data = await res.json();
 
-      alert("Request submitted successfully!");
+      if (data?.request?.id) {
+        setReceipt({
+          id: data.request.id,
+          status: data.request.status || "Raised",
+          need_type: data.request.need_type || cat,
+          location: data.request.location || location,
+        });
+      }
+
+      setMessage("Request submitted successfully. Your request is now in the NGO review queue.");
 
       setLocation("");
       setDescription("");
@@ -104,7 +122,7 @@ function Citizen() {
       setUrg("High");
     } catch (error) {
       console.log(error);
-      alert("Backend connection failed");
+      setMessage("Backend connection failed. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -256,6 +274,43 @@ function Citizen() {
           >
             {loading ? "Submitting..." : "Send request — match responder"}
           </button>
+
+          {message && (
+            <div className="rounded-xl border border-[oklch(0.85_0.17_80_/_0.35)] bg-[oklch(0.85_0.17_80_/_0.12)] px-4 py-3 text-sm font-medium text-[oklch(0.48_0.16_70)]">
+              {message}
+            </div>
+          )}
+
+          {receipt && (
+            <div className="rounded-2xl border border-[oklch(0.62_0.18_255_/_0.18)] bg-[oklch(0.62_0.18_255_/_0.08)] p-5 shadow-soft">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                <div>
+                  <div className="text-xs font-semibold uppercase tracking-[0.18em] text-[oklch(0.5_0.2_265)]">
+                    Request receipt
+                  </div>
+                  <h2 className="mt-2 text-lg font-semibold tracking-tight">
+                    Reference #{receipt.id}
+                  </h2>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    {receipt.need_type} request logged for {receipt.location}.
+                  </p>
+                </div>
+
+                <div className="inline-flex items-center gap-2 rounded-full border border-[oklch(0.68_0.2_20_/_0.2)] bg-[oklch(0.68_0.2_20_/_0.1)] px-3 py-1 text-xs font-semibold text-[oklch(0.5_0.22_20)]">
+                  Current status: {receipt.status}
+                </div>
+              </div>
+
+              <div className="mt-4 rounded-xl border border-border/70 bg-background/70 px-4 py-3">
+                <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  Next step
+                </div>
+                <p className="mt-1 text-sm text-foreground">
+                  An NGO coordinator will review this request, verify urgency, and move it into assignment for a volunteer responder.
+                </p>
+              </div>
+            </div>
+          )}
 
           <p className="text-[11px] text-muted-foreground text-center">
             By submitting, you agree to share your location with verified NGOs

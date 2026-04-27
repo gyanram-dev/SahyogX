@@ -1,12 +1,13 @@
 id,need_type,location,urgency,skill_required,status,assigned_to
-1,Medical Help,Patna,10,Medical,Completed,Volunteer A
-2,Food Kits,Patna,8,Food,Completed,Volunteer A
-3,Transport Support,Gaya,7,Logistics,Assigned,Volunteer A
-4,Teaching Support,Patna,6,Teaching,Open,
-5,Medical Emergency,Gaya,9,Medical,Open,
-6,Medical,dumka,10,Medical,Open,
-7,Medical,khudisar,8,Medical,Open,
-8,Medical,dumka ,8,Medical,Open,
-9,Shelter,need shelter urgent,6,Shelter,Open,
-10,Rescue,Kedarnath,10,Rescue,Completed,Volunteer A
-11,Food & water,deoghar,8,Food & water,Completed,Volunteer A
+1,Medical Assistance,Patna,10,Medical,Completed,Rahul
+2,Food Kit Delivery,Patna,8,Food,Completed,Priya
+3,Transport Support,Gaya,7,Logistics,Assigned,Aman
+4,Teaching Support,Patna,6,Teaching,Raised,
+5,Medical Emergency,Gaya,9,Medical,Raised,
+6,Shelter Assistance,Dumka,8,Shelter,Under Review,
+7,Water Supply Support,Deoghar,7,Food & Water,Raised,
+8,Emergency Evacuation,Kedarnath,10,Rescue,Completed,Ankit
+9,Logistics Coordination,Patna,6,Logistics,Accepted,Ankit
+10,Food & Water Support,Godda,6,Food & Water,Raised,
+11,First Aid Support,Dhanbad,8,Medical,Closed,Rohan
+12,Relief Material Delivery,Bokaro,7,Logistics,Raised,

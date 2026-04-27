@@ -2,10 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PageHeader, Card } from "../components/portal/PortalLayout";
 
 export const Route = createFileRoute("/ngo/post")({
-  head: () => ({ meta: [{ title: "Post Task — NGO" }] }),
+  head: () => ({ meta: [{ title: "Post Task - NGO" }] }),
   component: () => (
     <>
-      <PageHeader title="Post a task" subtitle="Describe the need — AI will match the right volunteers instantly." />
+      <PageHeader title="Post a task" subtitle="Describe the need clearly so the right volunteers can be matched quickly." />
       <Card className="max-w-3xl">
         <div className="grid gap-5">
           <Field label="Task title"><input className={inputCls} placeholder="e.g. Pack hygiene kits for Shelter B" /></Field>
@@ -31,7 +31,7 @@ export const Route = createFileRoute("/ngo/post")({
             <Field label="Window end"><input type="datetime-local" className={inputCls} /></Field>
           </div>
           <Field label="Required skills"><input className={inputCls} placeholder="e.g. First aid, Driving, Hindi" /></Field>
-          <Field label="Description"><textarea rows={4} className={inputCls} placeholder="What needs to happen, who is impacted, equipment needed…" /></Field>
+          <Field label="Description"><textarea rows={4} className={inputCls} placeholder="What needs to happen, who is impacted, and any equipment needed..." /></Field>
           <div className="flex justify-end gap-2 pt-2">
             <button className="px-4 py-2 rounded-lg border border-border text-sm font-medium">Save draft</button>
             <button className="px-4 py-2 rounded-lg gradient-brand text-white text-sm font-medium shadow-soft">Publish & match</button>

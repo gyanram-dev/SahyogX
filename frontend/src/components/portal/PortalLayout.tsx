@@ -34,7 +34,7 @@ export function PortalLayout({ brand, brandTag, accent, nav, children }: Props) 
             <Sparkles className="h-4 w-4 text-white" />
           </div>
           <div>
-            <div className="text-sm font-semibold tracking-tight">SahyogX AI</div>
+            <div className="text-sm font-semibold tracking-tight">SahyogX</div>
             <div className="text-[11px] uppercase tracking-wider text-muted-foreground">{brandTag}</div>
           </div>
         </div>
@@ -63,7 +63,7 @@ export function PortalLayout({ brand, brandTag, accent, nav, children }: Props) 
         <div className="p-4">
           <div className="rounded-xl glass p-4">
             <div className="text-xs font-semibold">Need help?</div>
-            <div className="text-[11px] text-muted-foreground mt-1">Our team responds in &lt;5 min</div>
+            <div className="text-[11px] text-muted-foreground mt-1">Support responds in under 5 minutes</div>
             <button className="mt-3 w-full text-xs font-medium px-3 py-2 rounded-md bg-foreground text-background hover:opacity-90 transition">
               Contact support
             </button>
@@ -82,10 +82,10 @@ export function PortalLayout({ brand, brandTag, accent, nav, children }: Props) 
             <div className="flex items-center gap-2 w-full px-3 py-2 rounded-lg bg-muted text-sm text-muted-foreground">
               <Search className="h-4 w-4" />
               <input
-                placeholder={`Search ${brand.toLowerCase()}…`}
+                placeholder={`Search ${brand.toLowerCase()}...`}
                 className="bg-transparent outline-none flex-1 text-foreground placeholder:text-muted-foreground"
               />
-              <kbd className="text-[10px] px-1.5 py-0.5 rounded border border-border bg-background">⌘K</kbd>
+              <kbd className="text-[10px] px-1.5 py-0.5 rounded border border-border bg-background">Ctrl K</kbd>
             </div>
           </div>
           <div className="flex-1" />
