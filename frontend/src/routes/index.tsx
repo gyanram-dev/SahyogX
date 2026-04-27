@@ -197,7 +197,7 @@ function LiveDashboard() {
           </span>
         </div>
         <div className="flex items-center gap-3 text-[11px] text-muted-foreground">
-          <span className="hidden sm:inline">Mumbai · Region NW</span>
+          <span className="hidden sm:inline">Mumbai | Region NW</span>
           <span className="flex items-center gap-1.5">
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full rounded-full bg-[oklch(0.72_0.17_162)] opacity-70 animate-ping" />
@@ -348,9 +348,9 @@ function LiveDashboard() {
           >
             <div className="flex items-center gap-1.5 font-semibold">
               <span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.7_0.22_30)]" />
-              Urgent zone — Andheri E.
+              Urgent zone - Andheri E.
             </div>
-            <div className="text-muted-foreground">3 active · 7 volunteers in range</div>
+            <div className="text-muted-foreground">3 active | 7 volunteers in range</div>
           </motion.div>
 
           {/* Bottom legend */}
@@ -842,7 +842,7 @@ function Index() {
         </motion.div>
       </section>
 
-      {/* ============== HOW IT WORKS — 3 STEPS ============== */}
+      {/* ============== HOW IT WORKS - 3 STEPS ============== */}
       <section id="how" className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 py-20">
         <motion.div {...fadeUp} className="text-center max-w-2xl mx-auto mb-14">
           <div className="inline-block text-xs font-medium px-3 py-1 rounded-full bg-muted text-muted-foreground mb-4">
@@ -1275,7 +1275,7 @@ function Index() {
             <div className="h-6 w-6 rounded-md gradient-brand flex items-center justify-center">
               <Sparkles className="h-3 w-3 text-white" />
             </div>
-            © {new Date().getFullYear()} SahyogX · Built for accountable relief coordination
+            � {new Date().getFullYear()} SahyogX | Built for accountable relief coordination
           </div>
           <div className="flex items-center gap-5">
             <a className="hover:text-foreground transition" href="#">
@@ -1293,3 +1293,4 @@ function Index() {
     </div>
   );
 }
+

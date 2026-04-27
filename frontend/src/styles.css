@@ -174,6 +174,11 @@
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
     font-feature-settings: "ss01", "cv11";
+    min-height: 100vh;
+  }
+  ::selection {
+    background: oklch(0.64 0.19 258 / 0.18);
+    color: var(--color-foreground);
   }
   h1, h2, h3, h4 {
     letter-spacing: -0.02em;
@@ -231,6 +236,37 @@
     box-shadow: var(--shadow-dark-glass);
   }
   .shadow-dark-glass { box-shadow: var(--shadow-dark-glass); }
+  .panel-premium {
+    background:
+      linear-gradient(180deg, oklch(1 0 0 / 0.98), oklch(0.985 0.01 230 / 0.88)),
+      linear-gradient(135deg, oklch(0.82 0.05 235 / 0.08), transparent 55%);
+    border: 1px solid oklch(0.92 0.015 230 / 0.95);
+    box-shadow: var(--shadow-soft);
+  }
+  .panel-premium-dark {
+    background:
+      linear-gradient(180deg, oklch(1 0 0 / 0.9), oklch(0.985 0.01 230 / 0.76)),
+      linear-gradient(135deg, oklch(0.72 0.17 162 / 0.08), transparent 50%);
+    border: 1px solid oklch(0.92 0.015 230 / 0.9);
+    box-shadow: var(--shadow-elevated);
+  }
+  .scrollbar-soft {
+    scrollbar-width: thin;
+    scrollbar-color: oklch(0.8 0.03 245) transparent;
+  }
+  .scrollbar-soft::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  .scrollbar-soft::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .scrollbar-soft::-webkit-scrollbar-thumb {
+    background: oklch(0.84 0.02 245);
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
   @keyframes ambient-shift {
     0%, 100% { background-position: 0% 0%, 100% 0%, 50% 100%; }
     50%      { background-position: 20% 15%, 75% 25%, 55% 80%; }

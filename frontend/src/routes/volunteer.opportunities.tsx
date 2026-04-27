@@ -23,8 +23,8 @@ function Opportunities() {
         title="Opportunities"
         subtitle="Available missions from verified NGOs, ranked by fit and urgency."
         action={
-          <button className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-border bg-card text-sm font-medium hover:bg-muted">
-            <Filter className="h-4 w-4" /> Filter
+          <button disabled className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-border bg-card text-sm font-medium text-muted-foreground opacity-70">
+            <Filter className="h-4 w-4" /> Filters Coming Soon
           </button>
         }
       />
@@ -43,8 +43,8 @@ function Opportunities() {
             <div className="flex flex-wrap gap-1.5 mt-3">
               {i.skills.map((s) => <Badge key={s} tone="neutral">{s}</Badge>)}
             </div>
-            <button className="mt-5 w-full text-sm font-medium py-2 rounded-lg gradient-emerald text-white shadow-soft">
-              View mission
+            <button disabled className="mt-5 w-full rounded-lg gradient-emerald py-2 text-sm font-medium text-white shadow-soft opacity-70">
+              Mission Details Coming Soon
             </button>
           </Card>
         ))}
