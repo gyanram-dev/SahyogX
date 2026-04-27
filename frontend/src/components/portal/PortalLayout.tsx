@@ -1,6 +1,6 @@
 import { ReactNode, useState } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
 import { Bell, Search, Sparkles } from "lucide-react";
 
 export type NavItem = {
