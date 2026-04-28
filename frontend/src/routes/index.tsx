@@ -635,24 +635,24 @@ function Index() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1, duration: 0.5 }}
-              className="urgent-pulse inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass text-xs font-medium text-muted-foreground mb-5"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-teal-400 mb-5"
             >
               <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full rounded-full bg-[oklch(0.72_0.17_162)] opacity-60 animate-ping" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-[oklch(0.72_0.17_162)]" />
+                <span className="absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-60 animate-ping" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-teal-400" />
               </span>
               Live relief coordination · Verified NGO and volunteer network
             </motion.div>
 
-            <h1 className="text-[2.6rem] leading-[1.05] sm:text-5xl lg:text-[4.5rem] lg:leading-[1.02] font-semibold tracking-tight">
+            <h1 className="text-[2.6rem] leading-[1.05] sm:text-5xl lg:text-[4.5rem] lg:leading-[1.02] font-bold tracking-wide text-white">
               Coordinate Relief.
               <br />
-              Dispatch The <span className="text-gradient-brand">Right Team</span>.
+              Dispatch The <span className="text-teal-400">Right Team</span>.
               <br />
               Track Every Outcome.
             </h1>
 
-            <p className="mt-5 text-base sm:text-lg text-muted-foreground max-w-xl mx-auto lg:mx-0">
+            <p className="mt-5 text-base sm:text-lg text-slate-400 max-w-xl mx-auto lg:mx-0">
               SahyogX turns citizen requests into accountable field action, helping NGOs triage,
               assign, and monitor relief work from one live command layer.
             </p>
