@@ -155,7 +155,7 @@ function NgoDashboard() {
         action={
           <Link
             to="/ngo/post"
-            className="inline-flex items-center gap-2 rounded-2xl gradient-brand px-4 py-2.5 text-sm font-medium text-white shadow-elevated transition hover:-translate-y-0.5 hover:opacity-95"
+            className="inline-flex items-center gap-2 rounded-xl bg-teal-500 px-4 py-2.5 text-sm font-semibold text-black transition hover:bg-teal-400 shadow-teal-glow"
           >
             <ClipboardList className="h-4 w-4" />
             Post Task
@@ -164,57 +164,45 @@ function NgoDashboard() {
       />
 
       {message && (
-        <div className="mb-5 rounded-2xl border border-[oklch(0.7_0.16_160_/_0.35)] bg-[oklch(0.7_0.16_160_/_0.1)] px-4 py-3 text-sm font-medium text-[oklch(0.45_0.16_160)] shadow-soft">
+        <div className="mb-5 rounded-xl border border-teal-500/20 bg-teal-500/10 px-4 py-3 text-sm font-medium text-teal-400">
           {message}
         </div>
       )}
 
-      <div className="grid gap-4 mb-6 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard
-          label="Total Requests"
-          value={String(totalRequests)}
-          delta="Live"
-          icon={AlertTriangle}
-          tone="blue"
-        />
-        <StatCard
-          label="Pending Requests"
-          value={String(pendingRequests)}
-          delta="Raised + review"
-          icon={Users}
-          tone="amber"
-        />
-        <StatCard
-          label="Assigned Requests"
-          value={String(assignedRequests)}
-          delta="Field active"
-          icon={Activity}
-          tone="emerald"
-        />
-        <StatCard
-          label="Completed Requests"
-          value={String(completedRequests)}
-          delta={`${completionRate}% closed`}
-          icon={TrendingUp}
-          tone="rose"
-        />
+      <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {[
+          { label: "Total Requests", value: totalRequests, icon: AlertTriangle, delta: "Live", tone: "blue" as const },
+          { label: "Pending Requests", value: pendingRequests, icon: Users, delta: "Raised + review", tone: "amber" as const },
+          { label: "Assigned Requests", value: assignedRequests, icon: Activity, delta: "Field active", tone: "emerald" as const },
+          { label: "Completed Requests", value: completedRequests, icon: TrendingUp, delta: `${completionRate}% closed`, tone: "rose" as const },
+        ].map((stat, idx) => (
+          <div key={stat.label} className={idx === 0 ? "animate-pulse-glow" : ""}>
+            <StatCard
+              label={stat.label}
+              value={String(stat.value)}
+              delta={stat.delta}
+              icon={stat.icon}
+              tone={stat.tone}
+            />
+          </div>
+        ))}
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
         <Card className="lg:col-span-2 p-0 overflow-hidden">
           <div className="flex items-center justify-between px-6 pt-6">
             <div>
-              <h3 className="font-semibold tracking-tight">Live Operations View</h3>
-              <p className="mt-1 text-xs text-muted-foreground">
+              <h3 className="font-bold text-white">Live Operations View</h3>
+              <p className="mt-1 text-xs text-slate-500">
                 Visual pulse of active requests, volunteer movement, and critical zones.
               </p>
             </div>
             <Badge tone="emerald">Live</Badge>
           </div>
 
-          <div className="relative mx-6 mb-6 mt-5 h-80 overflow-hidden rounded-[1.6rem] border border-border/70 bg-[oklch(0.97_0.01_250)]">
-            <div className="absolute inset-0 grid-bg opacity-60" />
-            <div className="absolute inset-0 bg-gradient-to-br from-[oklch(0.62_0.18_255_/_0.08)] via-transparent to-[oklch(0.72_0.17_162_/_0.1)]" />
+          <div className="relative mx-6 mb-6 mt-5 h-80 overflow-hidden rounded-2xl border border-teal-500/10 bg-slate-900/50">
+            <div className="absolute inset-0 grid-bg opacity-30" />
+            <div className="absolute inset-0 bg-gradient-to-br from-teal-500/5 via-transparent to-blue-500/5" />
 
             {[
               { x: "20%", y: "30%", c: "rose" },
@@ -224,33 +212,33 @@ function NgoDashboard() {
               { x: "80%", y: "65%", c: "blue" },
             ].map((p, i) => (
               <div key={i} className="absolute" style={{ left: p.x, top: p.y }}>
-                <span className="absolute -inset-3 rounded-full animate-ping bg-blue-300/40" />
+                <span className="absolute -inset-3 rounded-full animate-ping bg-teal-400/30" />
                 <span
-                  className={`relative block h-3.5 w-3.5 rounded-full ring-4 ring-white/75 shadow-elevated ${
+                  className={`relative block h-3.5 w-3.5 rounded-full ring-2 ring-slate-900 shadow-teal-glow ${
                     p.c === "rose"
                       ? "bg-rose-500"
                       : p.c === "emerald"
-                        ? "bg-emerald-500"
+                        ? "bg-teal-500"
                         : p.c === "amber"
-                          ? "bg-amber-500"
+                          ? "bg-orange-500"
                           : "bg-blue-500"
                   }`}
                 />
               </div>
             ))}
 
-            <div className="absolute bottom-4 left-4 rounded-2xl glass px-3.5 py-2 text-[11px] shadow-soft">
-              <div className="flex items-center gap-4 text-muted-foreground">
+            <div className="absolute bottom-4 left-4 rounded-xl border border-teal-500/10 bg-slate-900/80 px-3.5 py-2 text-[10px]">
+              <div className="flex items-center gap-4 text-slate-400">
                 <span className="flex items-center gap-1">
                   <span className="h-2 w-2 rounded-full bg-rose-500" />
                   Critical
                 </span>
                 <span className="flex items-center gap-1">
-                  <span className="h-2 w-2 rounded-full bg-amber-500" />
+                  <span className="h-2 w-2 rounded-full bg-orange-500" />
                   High
                 </span>
                 <span className="flex items-center gap-1">
-                  <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                  <span className="h-2 w-2 rounded-full bg-teal-500" />
                   Resolved
                 </span>
               </div>
@@ -260,49 +248,49 @@ function NgoDashboard() {
 
         <Card>
           <div className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-2xl gradient-brand text-white shadow-glow">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-teal-500/20 text-teal-400 border border-teal-500/30 shadow-teal-glow">
               <Sparkles className="h-4 w-4" />
             </div>
             <div>
-              <h3 className="font-semibold tracking-tight">Live Requests</h3>
-              <p className="text-xs text-muted-foreground">Prioritized by urgency</p>
+              <h3 className="font-bold text-white">Live Requests</h3>
+              <p className="text-xs text-slate-500">Prioritized by urgency</p>
             </div>
           </div>
 
           <div className="scrollbar-soft mt-5 max-h-[362px] space-y-3 overflow-y-auto pr-1">
             {loading ? (
               Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="animate-pulse rounded-2xl border border-border/70 bg-white/60 p-4 shadow-soft">
-                  <div className="h-4 w-28 rounded-full bg-muted" />
-                  <div className="mt-3 h-3 w-20 rounded-full bg-muted" />
-                  <div className="mt-4 h-8 w-full rounded-xl bg-muted" />
+                <div key={i} className="animate-pulse rounded-xl border border-teal-500/10 bg-slate-900/50 p-4">
+                  <div className="h-4 w-28 rounded bg-slate-800" />
+                  <div className="mt-3 h-3 w-20 rounded bg-slate-800" />
+                  <div className="mt-4 h-8 w-full rounded bg-slate-800" />
                 </div>
               ))
             ) : sortedRequests.length === 0 ? (
               <EmptyState
                 title="No live requests yet"
-                copy="Incoming requests will appear here automatically as citizens submit them."
+                copy="Incoming requests will appear here automatically."
               />
             ) : (
               sortedRequests.map((r) => (
                 <div
                   key={r.id}
-                  className="rounded-2xl border border-border/70 bg-white/65 p-4 shadow-soft transition hover:-translate-y-0.5 hover:shadow-elevated"
+                  className="rounded-xl border border-teal-500/10 bg-slate-900/30 p-4 transition-all hover:border-teal-500/25"
                 >
                   <div className="flex justify-between gap-3">
                     <div className="min-w-0">
-                      <div className="text-sm font-medium">{r.need_type || "Emergency Request"}</div>
-                      <div className="mt-1 text-xs text-muted-foreground">
+                      <div className="text-sm font-medium text-white">{r.need_type || "Emergency Request"}</div>
+                      <div className="mt-1 text-xs text-slate-500">
                         {r.location || "Unknown location"}
                       </div>
                       <div className="mt-2 flex flex-wrap items-center gap-2">
                         <Badge tone={statusTone(r.status)}>{statusLabel(r.status)}</Badge>
-                        <span className="text-[11px] font-medium text-muted-foreground">
+                        <span className="text-[10px] font-semibold text-slate-500">
                           Urgency {r.urgency}
                         </span>
                       </div>
                       {r.assigned_to && (
-                        <div className="mt-2 text-[11px] text-muted-foreground">
+                        <div className="mt-2 text-[10px] text-slate-500">
                           Assigned to {r.assigned_to}
                         </div>
                       )}
@@ -316,7 +304,7 @@ function NgoDashboard() {
                               updateRequest(r.id, "review", "Request moved to Under Review.")
                             }
                             disabled={actionId === `review-${r.id}`}
-                            className="rounded-xl border border-border bg-background/90 px-3 py-2 text-xs font-medium transition hover:bg-white disabled:opacity-50"
+                            className="rounded-xl border border-teal-500/20 bg-slate-800/50 px-3 py-2 text-xs font-medium text-slate-300 transition hover:bg-slate-700 disabled:opacity-50"
                           >
                             {actionId === `review-${r.id}` ? "Reviewing..." : "Review"}
                           </button>
@@ -326,7 +314,7 @@ function NgoDashboard() {
                           <button
                             onClick={() => updateRequest(r.id, "assign", "Request assigned.")}
                             disabled={actionId === `assign-${r.id}`}
-                            className="rounded-xl bg-blue-600 px-3 py-2 text-xs font-medium text-white shadow-soft transition hover:-translate-y-0.5 hover:bg-blue-700 disabled:opacity-50"
+                            className="rounded-xl bg-teal-500 px-3 py-2 text-xs font-semibold text-black transition hover:bg-teal-400 disabled:opacity-50"
                           >
                             {actionId === `assign-${r.id}` ? "Assigning..." : "Assign"}
                           </button>
@@ -338,7 +326,7 @@ function NgoDashboard() {
                               updateRequest(r.id, "close", "Completed request closed.")
                             }
                             disabled={actionId === `close-${r.id}`}
-                            className="rounded-xl bg-foreground px-3 py-2 text-xs font-medium text-background shadow-soft transition hover:-translate-y-0.5 hover:opacity-90 disabled:opacity-50"
+                            className="rounded-xl bg-slate-700 px-3 py-2 text-xs font-medium text-slate-300 transition hover:bg-slate-600 disabled:opacity-50"
                           >
                             {actionId === `close-${r.id}` ? "Closing..." : "Close"}
                           </button>
@@ -357,8 +345,8 @@ function NgoDashboard() {
         <Card>
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="font-semibold tracking-tight">Priority Queue</h3>
-              <p className="mt-1 text-xs text-muted-foreground">
+              <h3 className="font-bold text-white">Priority Queue</h3>
+              <p className="mt-1 text-xs text-slate-500">
                 Highest-urgency requests still in active handling.
               </p>
             </div>
@@ -368,9 +356,9 @@ function NgoDashboard() {
           <div className="mt-5 space-y-3">
             {loading ? (
               Array.from({ length: 3 }).map((_, i) => (
-                <div key={i} className="animate-pulse rounded-2xl border border-border/70 bg-white/60 p-4 shadow-soft">
-                  <div className="h-4 w-32 rounded-full bg-muted" />
-                  <div className="mt-2 h-3 w-24 rounded-full bg-muted" />
+                <div key={i} className="animate-pulse rounded-xl border border-teal-500/10 bg-slate-900/50 p-4">
+                  <div className="h-4 w-32 rounded bg-slate-800" />
+                  <div className="mt-2 h-3 w-24 rounded bg-slate-800" />
                 </div>
               ))
             ) : priorityQueue.length === 0 ? (
@@ -382,14 +370,14 @@ function NgoDashboard() {
               priorityQueue.map((request) => (
                 <div
                   key={request.id}
-                  className="flex items-center gap-3 rounded-2xl border border-border/70 bg-white/65 p-4 shadow-soft"
+                  className="flex items-center gap-3 rounded-xl border border-teal-500/10 bg-slate-900/30 p-4 transition-all hover:border-teal-500/25"
                 >
-                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[oklch(0.68_0.2_20_/_0.12)] text-[oklch(0.55_0.22_20)]">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-rose-500/20 text-rose-400 border border-rose-500/30">
                     <AlertTriangle className="h-4 w-4" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <div className="text-sm font-medium">{request.need_type}</div>
-                    <div className="mt-1 text-xs text-muted-foreground">
+                    <div className="text-sm font-medium text-white">{request.need_type}</div>
+                    <div className="mt-1 text-xs text-slate-500">
                       {request.location} · Urgency {request.urgency}
                     </div>
                   </div>
@@ -403,25 +391,25 @@ function NgoDashboard() {
         <Card>
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="font-semibold tracking-tight">Recent Reports</h3>
-              <p className="mt-1 text-xs text-muted-foreground">
+              <h3 className="font-bold text-white">Recent Reports</h3>
+              <p className="mt-1 text-xs text-slate-500">
                 Latest request records and their current workflow stage.
               </p>
             </div>
             <Link
               to="/ngo/post"
-              className="inline-flex items-center gap-1 text-xs font-medium text-accent transition hover:gap-1.5"
+              className="inline-flex items-center gap-1 text-xs font-medium text-teal-400 hover:gap-1.5 transition-all"
             >
               Add task <ArrowRight className="h-3 w-3" />
             </Link>
           </div>
 
-          <div className="mt-4 divide-y divide-border/70">
+          <div className="mt-4 space-y-1">
             {loading ? (
               Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="animate-pulse py-4">
-                  <div className="h-4 w-40 rounded-full bg-muted" />
-                  <div className="mt-2 h-3 w-24 rounded-full bg-muted" />
+                <div key={i} className="animate-pulse flex items-center justify-between gap-4 py-3">
+                  <div className="h-4 w-40 rounded bg-slate-800" />
+                  <div className="h-3 w-24 rounded bg-slate-800" />
                 </div>
               ))
             ) : recentReports.length === 0 ? (
@@ -432,18 +420,18 @@ function NgoDashboard() {
                 />
               </div>
             ) : (
-              recentReports.map((r) => (
-                <div key={r.id} className="flex items-center justify-between gap-4 py-4">
+              recentReports.map((r, idx) => (
+                <div key={r.id} className={`flex items-center justify-between gap-4 py-3 ${idx < recentReports.length - 1 ? "border-b border-teal-500/10" : ""}`}>
                   <div className="min-w-0">
-                    <div className="text-sm font-medium">{r.need_type}</div>
-                    <div className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
+                    <div className="text-sm font-medium text-white">{r.need_type}</div>
+                    <div className="mt-1 flex items-center gap-1 text-xs text-slate-500">
                       <MapPin className="h-3 w-3" />
                       {r.location}
                     </div>
                   </div>
                   <div className="text-right">
                     <Badge tone={statusTone(r.status)}>{statusLabel(r.status)}</Badge>
-                    <div className="mt-1 text-xs text-muted-foreground">Urgency {r.urgency}</div>
+                    <div className="mt-1 text-xs text-slate-500">Urgency {r.urgency}</div>
                   </div>
                 </div>
               ))
@@ -457,9 +445,9 @@ function NgoDashboard() {
 
 function EmptyState({ title, copy }: { title: string; copy: string }) {
   return (
-    <div className="rounded-2xl border border-dashed border-border/80 bg-background/60 px-4 py-6 text-center">
-      <div className="text-sm font-semibold tracking-tight">{title}</div>
-      <p className="mt-2 text-xs leading-6 text-muted-foreground">{copy}</p>
+    <div className="rounded-xl border border-dashed border-slate-700 bg-slate-900/30 px-4 py-6 text-center">
+      <div className="text-sm font-medium text-slate-400">{title}</div>
+      <p className="mt-2 text-xs leading-6 text-slate-500">{copy}</p>
     </div>
   );
 }

@@ -62,7 +62,7 @@ function VolunteerProfile() {
             </div>
           </div>
 
-          <div className="mt-6 rounded-2xl border border-border/70 bg-white/60 p-4 shadow-soft">
+          <div className="mt-6 rounded-2xl border border-border/70 bg-white/4 border border-white/8 p-4 shadow-soft">
             <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
               Impact Summary
             </div>
@@ -72,19 +72,19 @@ function VolunteerProfile() {
           </div>
 
           <div className="mt-5 grid grid-cols-3 gap-3 text-center">
-            <div className="rounded-2xl border border-border/70 bg-white/60 px-3 py-4 shadow-soft">
+            <div className="rounded-2xl border border-border/70 bg-white/4 border border-white/8 px-3 py-4 shadow-soft">
               <div className="text-lg font-semibold">7</div>
               <div className="mt-1 text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
                 Skills
               </div>
             </div>
-            <div className="rounded-2xl border border-border/70 bg-white/60 px-3 py-4 shadow-soft">
+            <div className="rounded-2xl border border-border/70 bg-white/4 border border-white/8 px-3 py-4 shadow-soft">
               <div className="text-lg font-semibold">2</div>
               <div className="mt-1 text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
                 Windows
               </div>
             </div>
-            <div className="rounded-2xl border border-border/70 bg-white/60 px-3 py-4 shadow-soft">
+            <div className="rounded-2xl border border-border/70 bg-white/4 border border-white/8 px-3 py-4 shadow-soft">
               <div className="text-lg font-semibold">Live</div>
               <div className="mt-1 text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
                 Status
@@ -121,7 +121,7 @@ function VolunteerProfile() {
               return (
                 <div
                   key={stat.label}
-                  className="rounded-[1.5rem] border border-border/70 bg-white/65 p-5 shadow-soft transition hover:-translate-y-0.5 hover:shadow-elevated"
+                  className="rounded-[1.5rem] border border-border/70 bg-white/4 border border-white/8 p-5 shadow-soft transition hover:-translate-y-0.5 hover:shadow-elevated"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div
@@ -142,17 +142,17 @@ function VolunteerProfile() {
           </div>
 
           <div className="mt-6 grid gap-4 sm:grid-cols-2">
-            <div className="rounded-2xl border border-border/70 bg-white/60 p-4 shadow-soft">
+            <div className="rounded-2xl border border-border/70 bg-white/4 border border-white/8 p-4 shadow-soft">
               <div className="text-xs text-muted-foreground">Weekday window</div>
               <div className="mt-1 font-medium">6 PM - 10 PM</div>
             </div>
-            <div className="rounded-2xl border border-border/70 bg-white/60 p-4 shadow-soft">
+            <div className="rounded-2xl border border-border/70 bg-white/4 border border-white/8 p-4 shadow-soft">
               <div className="text-xs text-muted-foreground">Weekend window</div>
               <div className="mt-1 font-medium">All day</div>
             </div>
           </div>
 
-          <div className="mt-6 rounded-2xl border border-border/70 bg-white/60 p-4 shadow-soft">
+          <div className="mt-6 rounded-2xl border border-border/70 bg-white/4 border border-white/8 p-4 shadow-soft">
             <div className="mb-3 flex items-center gap-2">
               <HeartHandshake className="h-4 w-4 text-[oklch(0.5_0.16_160)]" />
               <div className="text-sm font-semibold tracking-tight">

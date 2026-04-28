@@ -58,10 +58,7 @@ function VolunteerHome() {
   const loadTasks = async () => {
     try {
       const res = await fetch(apiUrl("/volunteer/tasks"));
-      if (!res.ok) {
-        throw new Error(`Task fetch failed with status ${res.status}`);
-      }
-
+      if (!res.ok) throw new Error(`Task fetch failed with status ${res.status}`);
       const data = await res.json();
       setTasks(Array.isArray(data) ? data : []);
     } catch (error) {
@@ -85,11 +82,7 @@ function VolunteerHome() {
       const res = await fetch(apiUrl(`/volunteer/${action}/${id}`), {
         method: "POST",
       });
-
-      if (!res.ok) {
-        throw new Error(`Task update failed with status ${res.status}`);
-      }
-
+      if (!res.ok) throw new Error(`Task update failed with status ${res.status}`);
       await loadTasks();
       setMessage(action === "accept" ? "Task accepted." : "Task marked complete.");
     } catch (error) {
@@ -108,8 +101,17 @@ function VolunteerHome() {
   const acceptedCount = tasks.filter((task) => task.status === "Accepted").length;
   const assignedCount = tasks.filter((task) => task.status === "Assigned").length;
   const criticalCount = tasks.filter((task) => task.urgency >= 9).length;
-  const activeRate =
-    tasks.length === 0 ? 0 : Math.round((acceptedCount / tasks.length) * 100);
+  const activeRate = tasks.length === 0 ? 0 : Math.round((acceptedCount / tasks.length) * 100);
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.08 } },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 16 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+  };
 
   return (
     <>
@@ -119,59 +121,47 @@ function VolunteerHome() {
       />
 
       {message && (
-        <div className="mb-5 rounded-2xl border border-[oklch(0.7_0.16_160_/_0.35)] bg-[oklch(0.7_0.16_160_/_0.1)] px-4 py-3 text-sm font-medium text-[oklch(0.45_0.16_160)] shadow-soft">
+        <div className="mb-5 rounded-xl border border-teal-500/20 bg-teal-500/10 px-4 py-3 text-sm font-medium text-teal-400">
           {message}
         </div>
       )}
 
       <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard
-          label="Active tasks"
-          value={String(tasks.length)}
-          delta={loading ? "Syncing" : "Live"}
-          icon={Target}
-          tone="emerald"
-        />
-        <StatCard
-          label="Awaiting acceptance"
-          value={String(assignedCount)}
-          delta="Assigned"
-          icon={Users}
-          tone="blue"
-        />
-        <StatCard
-          label="In progress"
-          value={String(acceptedCount)}
-          delta={`${activeRate}% active`}
-          icon={Activity}
-          tone="amber"
-        />
-        <StatCard
-          label="Critical priority"
-          value={String(criticalCount)}
-          delta="Urgency 9+"
-          icon={AlertTriangle}
-          tone="rose"
-        />
+        {[
+          { label: "Active tasks", value: tasks.length, icon: Target, delta: loading ? "Syncing" : "Live", tone: "emerald" as const },
+          { label: "Awaiting acceptance", value: assignedCount, icon: Users, delta: "Assigned", tone: "blue" as const },
+          { label: "In progress", value: acceptedCount, icon: Activity, delta: `${activeRate}% active`, tone: "amber" as const },
+          { label: "Critical priority", value: criticalCount, icon: AlertTriangle, delta: "Urgency 9+", tone: "rose" as const },
+        ].map((stat, idx) => (
+          <div key={stat.label} className={idx === 0 ? "animate-pulse-glow" : ""}>
+            <StatCard
+              label={stat.label}
+              value={String(stat.value)}
+              delta={stat.delta}
+              icon={stat.icon}
+              tone={stat.tone}
+            />
+          </div>
+        ))}
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
         <Card className="lg:col-span-2">
           <div className="mb-5 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-2xl gradient-emerald text-white shadow-glow">
+              <div className="flex h-10 w-10 rounded-xl bg-teal-500/20 text-teal-400 border border-teal-500/30 flex items-center justify-center shadow-teal-glow">
                 <HeartHandshake className="h-4 w-4" />
               </div>
               <div>
-                <h3 className="font-semibold tracking-tight">Assigned tasks</h3>
-                <p className="mt-1 text-xs text-muted-foreground">
+                <h3 className="font-bold text-white">Assigned tasks</h3>
+                <p className="mt-1 text-xs text-slate-500">
                   Live work routed by NGO coordinators.
                 </p>
               </div>
             </div>
             <Link
               to="/volunteer/opportunities"
-              className="inline-flex items-center gap-1 text-xs font-medium text-accent transition hover:gap-1.5"
+              className="inline-flex items-center gap-1 text-xs font-medium text-teal-400 hover:gap-1.5 transition-all"
             >
               View all <ArrowRight className="h-3 w-3" />
             </Link>
@@ -180,30 +170,30 @@ function VolunteerHome() {
           <div className="space-y-3">
             {loading ? (
               Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="animate-pulse rounded-2xl border border-border/70 bg-white/60 p-4 shadow-soft">
-                  <div className="h-4 w-32 rounded-full bg-muted" />
-                  <div className="mt-2 h-3 w-20 rounded-full bg-muted" />
-                  <div className="mt-4 h-10 w-full rounded-2xl bg-muted" />
+                <div key={i} className="animate-pulse rounded-xl border border-teal-500/10 bg-slate-900/50 p-4">
+                  <div className="h-4 w-32 rounded bg-slate-800" />
+                  <div className="mt-2 h-3 w-20 rounded bg-slate-800" />
+                  <div className="mt-4 h-10 w-full rounded bg-slate-800" />
                 </div>
               ))
             ) : liveTasks.length === 0 ? (
-              <EmptyState
-                title="No assigned volunteer tasks yet"
-                copy="As soon as an NGO assigns new work, it will appear here automatically."
-              />
+              <div className="rounded-xl border border-dashed border-slate-700 bg-slate-900/30 px-4 py-6 text-center">
+                <div className="text-sm font-medium text-slate-400">No assigned volunteer tasks yet</div>
+                <p className="mt-2 text-xs text-slate-500">As soon as an NGO assigns new work, it will appear here automatically.</p>
+              </div>
             ) : (
               liveTasks.map((task) => (
                 <div
                   key={task.id}
-                  className="group flex flex-col gap-3 rounded-[1.6rem] border border-border/70 bg-white/65 p-4 shadow-soft transition hover:-translate-y-0.5 hover:shadow-elevated sm:flex-row sm:items-center"
+                  className="group flex flex-col gap-3 rounded-xl border border-teal-500/10 bg-slate-900/30 p-4 transition-all hover:border-teal-500/25 sm:flex-row sm:items-center"
                 >
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="text-sm font-medium">{task.need_type || "Emergency Request"}</span>
+                      <span className="text-sm font-medium text-white">{task.need_type || "Emergency Request"}</span>
                       <Badge tone={urgencyTone(task.urgency)}>{urgencyLabel(task.urgency)}</Badge>
                       <Badge tone={statusTone(task.status)}>{task.status}</Badge>
                     </div>
-                    <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+                    <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-slate-500">
                       <span>{task.assigned_to || "Volunteer assignment"}</span>
                       <span className="flex items-center gap-1">
                         <MapPin className="h-3 w-3" /> {task.location || "Unknown location"}
@@ -216,14 +206,14 @@ function VolunteerHome() {
                     <button
                       onClick={() => updateTask(task.id, "accept")}
                       disabled={task.status !== "Assigned" || actionId === task.id}
-                      className="rounded-xl gradient-emerald px-3.5 py-2 text-xs font-medium text-white shadow-soft transition hover:-translate-y-0.5 hover:shadow-elevated disabled:cursor-not-allowed disabled:opacity-50"
+                      className="rounded-xl bg-teal-500 text-black font-semibold px-3.5 py-2 text-xs transition hover:bg-teal-400 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {actionId === task.id && task.status === "Assigned" ? "Accepting..." : "Accept Task"}
                     </button>
                     <button
                       onClick={() => updateTask(task.id, "complete")}
                       disabled={task.status !== "Accepted" || actionId === task.id}
-                      className="inline-flex items-center gap-1.5 rounded-xl border border-border/80 bg-background/90 px-3.5 py-2 text-xs font-medium shadow-soft transition hover:-translate-y-0.5 hover:bg-white disabled:cursor-not-allowed disabled:opacity-50"
+                      className="inline-flex items-center gap-1.5 rounded-xl border border-teal-500/20 bg-teal-500/10 px-3.5 py-2 text-xs font-medium text-teal-400 hover:bg-teal-500/20 transition disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <CheckCircle2 className="h-3.5 w-3.5" />
                       {actionId === task.id && task.status === "Accepted" ? "Completing..." : "Mark Complete"}
@@ -236,8 +226,8 @@ function VolunteerHome() {
         </Card>
 
         <Card>
-          <h3 className="font-semibold tracking-tight">Queue overview</h3>
-          <p className="mt-1 text-xs text-muted-foreground">
+          <h3 className="font-bold text-white">Queue overview</h3>
+          <p className="mt-1 text-xs text-slate-500">
             Derived from live volunteer task status.
           </p>
 
@@ -264,17 +254,13 @@ function VolunteerHome() {
             ].map((metric) => (
               <div key={metric.label}>
                 <div className="mb-1.5 flex items-center justify-between text-xs">
-                  <span className="text-muted-foreground">{metric.label}</span>
-                  <span className="font-medium">{metric.value}</span>
+                  <span className="text-slate-500">{metric.label}</span>
+                  <span className="font-semibold text-teal-400">{metric.value}</span>
                 </div>
-                <div className="h-2 rounded-full bg-muted overflow-hidden">
+                <div className="h-1.5 rounded-full bg-slate-800 overflow-hidden">
                   <div
                     className={`h-full rounded-full ${
-                      metric.tone === "emerald"
-                        ? "gradient-emerald"
-                        : metric.tone === "blue"
-                          ? "gradient-brand"
-                          : "gradient-amber"
+                      metric.tone === "emerald" ? "bg-teal-500" : metric.tone === "blue" ? "bg-blue-500" : "bg-yellow-500"
                     }`}
                     style={{ width: `${metric.width}%` }}
                   />
@@ -283,9 +269,9 @@ function VolunteerHome() {
             ))}
           </div>
 
-          <div className="mt-6 rounded-2xl border border-border/70 bg-white/60 p-4 shadow-soft">
-            <div className="text-sm font-semibold tracking-tight">Field note</div>
-            <p className="mt-2 text-xs leading-6 text-muted-foreground">
+          <div className="mt-6 rounded-xl border border-teal-500/10 bg-slate-900/50 px-4 py-4">
+            <div className="text-sm font-semibold text-white">Field note</div>
+            <p className="mt-2 text-xs leading-6 text-slate-400">
               Accept tasks as soon as you are ready to take ownership so coordinators can see which missions are actively moving.
             </p>
           </div>
@@ -297,9 +283,9 @@ function VolunteerHome() {
 
 function EmptyState({ title, copy }: { title: string; copy: string }) {
   return (
-    <div className="rounded-2xl border border-dashed border-border/80 bg-background/60 px-4 py-6 text-center">
-      <div className="text-sm font-semibold tracking-tight">{title}</div>
-      <p className="mt-2 text-xs leading-6 text-muted-foreground">{copy}</p>
+    <div className="rounded-xl border border-dashed border-slate-700 bg-slate-900/30 px-4 py-6 text-center">
+      <div className="text-sm font-medium text-slate-400">{title}</div>
+      <p className="mt-2 text-xs leading-6 text-slate-500">{copy}</p>
     </div>
   );
 }

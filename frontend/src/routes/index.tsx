@@ -26,7 +26,7 @@ import {
 } from "lucide-react";
 import featureCitizen from "@/assets/feature-citizen.png";
 import featureVolunteer from "@/assets/feature-volunteer.png";
-import heroTeam from "@/assets/hero-team.png";
+import heroTeam from "@/assets/hero-team.webp";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -82,16 +82,16 @@ const ctas = [
     desc: "Submit verified needs with urgency and location.",
     icon: Siren,
     to: "/citizen",
-    gradient: "from-[oklch(0.78_0.18_55)] to-[oklch(0.65_0.22_30)]",
-    ring: "oklch(0.7 0.2 40 / 0.35)",
+    gradient: "from-teal-500 to-cyan-600",
+    ring: "oklch(175 80% 45% / 0.35)",
   },
   {
     title: "Accept Missions",
     desc: "Receive tasks matched to your skills and availability.",
     icon: HeartHandshake,
     to: "/volunteer",
-    gradient: "from-[oklch(0.72_0.16_160)] to-[oklch(0.6_0.18_180)]",
-    ring: "oklch(0.7 0.16 160 / 0.35)",
+    gradient: "from-teal-500 to-emerald-600",
+    ring: "oklch(175 80% 45% / 0.35)",
   },
   {
     title: "Run Operations",
@@ -219,7 +219,7 @@ function LiveDashboard() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.06, ease: EASE }}
-              className="relative rounded-2xl border border-border bg-background/70 px-4 py-3.5 hover:shadow-soft transition"
+              className="relative rounded-2xl border border-border bg-[#080c14]/70 px-4 py-3.5 hover:shadow-soft transition"
             >
               <div className="flex items-center justify-between">
                 <div
@@ -273,9 +273,9 @@ function LiveDashboard() {
             <path d="M240,0 L250,200" stroke="oklch(0.22 0.07 260 / 0.06)" strokeWidth="9" />
           </svg>
           {/* Heat zones */}
-          <div className="absolute h-40 w-40 rounded-full blur-3xl bg-[oklch(0.7_0.22_30/0.35)] top-[8%] left-[8%]" />
-          <div className="absolute h-44 w-44 rounded-full blur-3xl bg-[oklch(0.72_0.17_162/0.30)] top-[35%] left-[34%]" />
-          <div className="absolute h-36 w-36 rounded-full blur-3xl bg-[oklch(0.64_0.19_258/0.28)] top-[48%] left-[66%]" />
+          <div className="absolute h-40 w-40 rounded-full blur-3xl bg-[oklch(0.7_0.22_30/0.35)] top-[8%] left-[8%] z-0" />
+          <div className="absolute h-44 w-44 rounded-full blur-3xl bg-[oklch(0.72_0.17_162/0.30)] top-[35%] left-[34%] z-0" />
+          <div className="absolute h-36 w-36 rounded-full blur-3xl bg-[oklch(0.64_0.19_258/0.28)] top-[48%] left-[66%] z-0" />
 
           {/* Animated dotted routes */}
           <svg className="absolute inset-0 w-full h-full" viewBox="0 0 340 200" preserveAspectRatio="none">
@@ -362,7 +362,7 @@ function LiveDashboard() {
         </div>
 
         {/* Recent requests table */}
-        <div className="lg:col-span-2 rounded-2xl border border-border bg-background/70 p-4">
+        <div className="lg:col-span-2 rounded-2xl border border-border bg-[#080c14]/70 p-4">
           <div className="flex items-center justify-between mb-3">
             <div className="text-sm font-semibold tracking-tight">Recent requests</div>
             <span className="text-[10.5px] text-muted-foreground">Coordinated live</span>
@@ -409,7 +409,7 @@ function LiveDashboard() {
       {/* Charts row: line + bar + donut */}
       <div className="grid lg:grid-cols-3 gap-4 px-5 pb-5">
         {/* Line chart — response time 7d */}
-        <div className="rounded-2xl border border-border bg-background/70 p-4">
+        <div className="rounded-2xl border border-border bg-[#080c14]/70 p-4">
           <div className="flex items-center justify-between mb-2">
             <div>
               <div className="text-[10.5px] uppercase tracking-wider text-muted-foreground">
@@ -479,7 +479,7 @@ function LiveDashboard() {
         </div>
 
         {/* Bar chart — by category */}
-        <div className="rounded-2xl border border-border bg-background/70 p-4">
+        <div className="rounded-2xl border border-border bg-[#080c14]/70 p-4">
           <div className="flex items-center justify-between mb-3">
             <div>
               <div className="text-[10.5px] uppercase tracking-wider text-muted-foreground">
@@ -514,7 +514,7 @@ function LiveDashboard() {
         </div>
 
         {/* Donut — volunteer availability */}
-        <div className="rounded-2xl border border-border bg-background/70 p-4">
+        <div className="rounded-2xl border border-border bg-[#080c14]/70 p-4">
           <div className="flex items-center justify-between mb-2">
             <div>
               <div className="text-[10.5px] uppercase tracking-wider text-muted-foreground">
@@ -571,20 +571,20 @@ function LiveDashboard() {
 /* ============== Page ============== */
 function Index() {
   return (
-    <div className="min-h-screen bg-background relative overflow-hidden">
+    <div className="min-h-screen bg-[#080c14] relative overflow-hidden">
       {/* Decorative background */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute inset-0 ambient-gradient" />
+      <div className="pointer-events-none absolute inset-0 overflow-hidden z-0">
+        <div className="absolute inset-0 bg-[#080c14]" />
         <div
-          className="float-shape h-[520px] w-[520px] -top-40 -left-40 bg-[oklch(0.78_0.14_250/0.45)]"
+          className="float-shape h-[520px] w-[520px] -top-40 -left-40 bg-teal-500/5"
           style={{ animationDelay: "0s" }}
         />
         <div
-          className="float-shape h-[480px] w-[480px] top-20 right-[-180px] bg-[oklch(0.78_0.14_165/0.40)]"
+          className="float-shape h-[480px] w-[480px] top-20 right-[-180px] bg-blue-500/5"
           style={{ animationDelay: "-6s", animationDuration: "22s" }}
         />
         <div
-          className="float-shape h-[420px] w-[420px] top-[40%] left-[30%] bg-[oklch(0.85_0.14_70/0.30)]"
+          className="float-shape h-[420px] w-[420px] top-[40%] left-[30%] bg-teal-400/5"
           style={{ animationDelay: "-12s", animationDuration: "26s" }}
         />
       </div>
@@ -624,9 +624,9 @@ function Index() {
 
       {/* ============== HERO ============== */}
       <section className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 pt-6 lg:pt-10 pb-14">
-        <div className="grid lg:grid-cols-12 gap-8 lg:gap-6 items-center">
+        <div className="grid lg:grid-cols-12 gap-8 lg:gap-6 items-center relative z-10">
           <motion.div
-            className="lg:col-span-7 text-center lg:text-left"
+            className="lg:col-span-7 text-center lg:text-left relative z-10"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: EASE }}
@@ -758,9 +758,10 @@ function Index() {
                   transition={{ duration: 9, repeat: Infinity, ease: "linear" }}
                 />
               </svg>
-              <div className="absolute inset-x-0 bottom-0 -z-10 h-[70%] blur-3xl opacity-80 bg-gradient-to-br from-[oklch(0.74_0.13_210/0.6)] via-[oklch(0.72_0.17_162/0.5)] to-[oklch(0.74_0.19_50/0.4)] rounded-[40%]" />
+              <div className="absolute inset-x-0 bottom-0 -z-10 h-[70%] blur-3xl opacity-80 bg-gradient-to-br from-teal-500/20 via-teal-500/10 to-orange-500/10 rounded-[40%]" />
               <img
                 src={heroTeam}
+                loading="lazy"
                 alt="Diverse NGO team of coordinators, volunteers and a logistics helper collaborating on relief operations"
                 width={1280}
                 height={1280}
@@ -833,7 +834,7 @@ function Index() {
         >
           {stats.map((s) => (
             <div key={s.label} className="text-center">
-              <div className="text-3xl lg:text-4xl font-semibold tracking-tight text-gradient-brand">
+              <div className="text-3xl lg:text-4xl font-semibold tracking-tight text-teal-400">
                 <Counter to={s.v} suffix={s.suffix} />
               </div>
               <div className="text-xs text-muted-foreground mt-1">{s.label}</div>
@@ -1206,12 +1207,11 @@ function Index() {
           {[
             { v: 98, suffix: "%", label: "Success rate", color: "oklch(0.72 0.17 162)" },
             { v: 2847, suffix: "+", label: "Volunteers verified", color: "oklch(0.64 0.19 258)" },
-            { v: 14, suffix: "", label: "Cities live", color: "oklch(0.74 0.19 50)" },
+            { v: 14, suffix: "", label: "Cities live", color: "text-teal-400" },
           ].map((s) => (
             <div key={s.label} className="text-center sm:px-4">
               <div
-                className="text-3xl lg:text-4xl font-semibold tracking-tight tabular-nums"
-                style={{ color: s.color }}
+                className="text-3xl lg:text-4xl font-semibold tracking-tight tabular-nums text-teal-400"
               >
                 <Counter to={s.v} suffix={s.suffix} />
               </div>
@@ -1275,7 +1275,7 @@ function Index() {
             <div className="h-6 w-6 rounded-md gradient-brand flex items-center justify-center">
               <Sparkles className="h-3 w-3 text-white" />
             </div>
-            � {new Date().getFullYear()} SahyogX | Built for accountable relief coordination
+            � {new Date().getFullYear()} SahyogX | Built for accountable relief coordination
           </div>
           <div className="flex items-center gap-5">
             <a className="hover:text-foreground transition" href="#">
