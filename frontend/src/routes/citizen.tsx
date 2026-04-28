@@ -136,7 +136,7 @@ function Citizen() {
       <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
         <Link
           to="/"
-          className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-white/70 px-3.5 py-2 text-sm text-muted-foreground shadow-soft backdrop-blur transition hover:-translate-y-0.5 hover:text-foreground"
+          className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-white/70 px-3.5 py-2 text-sm text-muted-foreground shadow-soft transition hover:-translate-y-0.5 hover:text-foreground"
         >
           <ArrowLeft className="h-4 w-4" /> Back
         </Link>
@@ -156,7 +156,7 @@ function Citizen() {
 
       <main className="mx-auto max-w-6xl px-6 pb-20">
         <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
-          <section className="lg:sticky lg:top-24">
+          <section>
             <div className="rounded-[2rem] panel-premium p-7 lg:p-8">
               <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-white/70 px-3 py-1 text-xs font-medium text-muted-foreground shadow-soft">
                 <ShieldCheck className="h-3 w-3 text-[oklch(0.5_0.16_160)]" />
@@ -193,7 +193,7 @@ function Citizen() {
                   return (
                     <div
                       key={item.title}
-                      className="rounded-2xl border border-border/70 bg-white/65 p-4 shadow-soft backdrop-blur"
+                      className="rounded-2xl border border-border/70 bg-white/65 p-4 shadow-soft"
                     >
                       <div className="flex h-10 w-10 items-center justify-center rounded-2xl gradient-amber text-white shadow-soft">
                         <Icon className="h-4 w-4" />
